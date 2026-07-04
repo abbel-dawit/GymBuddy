@@ -1,0 +1,3508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>GymBuddy — Train Home. Join Local. Move Ethiopia.</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236D28D9'/%3E%3Cstop offset='1' stop-color='%232563EB'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Crect x='12' y='29' width='40' height='6' rx='3' fill='%23fff'/%3E%3Crect x='6' y='18' width='9' height='28' rx='4.5' fill='%23fff'/%3E%3Crect x='49' y='18' width='9' height='28' rx='4.5' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root{
+    --grad-a:#6D28D9;
+    --grad-b:#2563EB;
+    --purple:#7C3AED;
+    --purple-light:#F1EBFE;
+    --blue:#2563EB;
+    --blue-light:#EAF1FF;
+    --bg:#F6F5FB;
+    --card:#FFFFFF;
+    --text:#1C1830;
+    --muted:#6E6A85;
+    --muted-light:#9895AC;
+    --border:#E7E4F2;
+    --success:#16A34A;
+    --success-light:#E9F9EF;
+    --danger:#DC2626;
+    --danger-light:#FDECEC;
+    --warn:#D97706;
+    --warn-light:#FEF3E1;
+    --surface-translucent: rgba(246,245,251,.88);
+    --radius-sm:10px;
+    --radius:16px;
+    --radius-lg:22px;
+    --shadow: 0 2px 10px rgba(31,16,90,.06);
+    --shadow-md: 0 8px 28px rgba(31,16,90,.12);
+    color-scheme: light;
+  }
+  :root[data-theme="dark"]{
+    --purple-light:#241C3B;
+    --blue-light:#14213A;
+    --bg:#100D1C;
+    --card:#1A1630;
+    --text:#F1EEFA;
+    --muted:#A9A3C4;
+    --muted-light:#726C93;
+    --border:#2C2645;
+    --success-light:#122A1F;
+    --danger-light:#301619;
+    --warn-light:#2E230F;
+    --surface-translucent: rgba(16,13,28,.86);
+    --shadow: 0 2px 10px rgba(0,0,0,.28);
+    --shadow-md: 0 8px 30px rgba(0,0,0,.42);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    transition: background-color .2s ease, color .2s ease;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  #root{min-height:100vh;}
+  img{max-width:100%;display:block;}
+  button{font-family:inherit;}
+  a{color:inherit;}
+
+  .grad-text{
+    background:linear-gradient(135deg,var(--grad-a),var(--grad-b));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .grad-bg{background:linear-gradient(135deg,var(--grad-a),var(--grad-b));}
+  .grad-bg-soft{background:linear-gradient(135deg,#F1EBFE,#EAF1FF);}
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    padding:15px 22px;
+    border-radius:14px;
+    font-weight:700;
+    font-size:15px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    border:1.5px solid transparent;
+    cursor:pointer;
+    transition:transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+    line-height:1;
+    white-space:nowrap;
+  }
+  .btn:active{transform:scale(.97);}
+  .btn:disabled{opacity:.5;cursor:not-allowed;}
+  .btn-primary{background:linear-gradient(135deg,var(--grad-a),var(--grad-b));color:#fff;box-shadow:0 6px 16px rgba(109,40,217,.28);}
+  .btn-secondary{background:var(--card);border-color:var(--border);color:var(--text);}
+  .btn-ghost{background:transparent;color:var(--purple);border-color:transparent;padding:12px 16px;}
+  .btn-danger{background:var(--danger-light);color:var(--danger);}
+  .btn-block{width:100%;}
+  .btn-sm{padding:10px 16px;font-size:13px;border-radius:11px;}
+  .btn-lg{padding:17px 26px;font-size:16px;border-radius:16px;}
+  .icon-btn{
+    width:44px;height:44px;min-width:44px;border-radius:13px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--card);border:1.5px solid var(--border);cursor:pointer;color:var(--text);
+  }
+  .icon-btn:active{transform:scale(.94);}
+  .icon-btn.on{background:var(--purple-light);border-color:var(--purple-light);color:var(--purple);}
+
+  .switch{
+    width:46px;height:27px;border-radius:20px;border:none;background:var(--border);
+    position:relative;cursor:pointer;transition:background .15s ease;flex-shrink:0;padding:0;
+  }
+  .switch.on{background:linear-gradient(135deg,var(--grad-a),var(--grad-b));}
+  .switch-knob{
+    position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#fff;
+    box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .15s ease;
+  }
+  .switch.on .switch-knob{transform:translateX(19px);}
+
+  /* ---------- Inputs ---------- */
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:8px;letter-spacing:.2px;}
+  .input, select.input, textarea.input{
+    width:100%;
+    padding:15px 16px;
+    border-radius:13px;
+    border:1.5px solid var(--border);
+    font-size:15px;
+    font-family:inherit;
+    background:var(--card);
+    color:var(--text);
+    outline:none;
+    transition:border-color .12s ease;
+  }
+  .input:focus{border-color:var(--purple);}
+  textarea.input{resize:vertical;min-height:90px;}
+  select.input{
+    appearance:none;-webkit-appearance:none;-moz-appearance:none;
+    height:52px;line-height:1.2;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%236E6A85' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 14px center;padding-right:42px;
+    cursor:pointer;
+  }
+  .input:not(select):not(textarea){height:52px;}
+  .input-row{display:flex;gap:12px;}
+  @media(max-width:420px){
+    .input-row{flex-direction:column;gap:0;}
+  }
+  .input-row .field{flex:1;}
+
+  /* ---------- Layout ---------- */
+  .app-shell{max-width:520px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative;padding-bottom:92px;}
+  @media(min-width:860px){
+    .app-shell{max-width:900px;}
+  }
+  @media(min-width:1180px){
+    .app-shell{max-width:1080px;}
+  }
+  .page{padding:18px 18px 8px;}
+  .section{margin-bottom:26px;}
+  .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  .section-head h3{margin:0;font-size:17px;font-weight:800;}
+  .section-head .link{font-size:13px;font-weight:700;color:var(--purple);cursor:pointer;background:none;border:none;padding:0;}
+
+  .card{
+    background:var(--card);
+    border-radius:var(--radius-lg);
+    border:1px solid var(--border);
+    box-shadow:var(--shadow);
+    padding:18px;
+  }
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(min-width:640px){
+    .grid-3-tab{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  }
+  @media(min-width:900px){
+    .grid-3-tab{grid-template-columns:1fr 1fr 1fr;}
+    .grid-2{grid-template-columns:1fr 1fr 1fr;}
+  }
+
+  .badge{
+    display:inline-flex;align-items:center;gap:5px;
+    padding:5px 11px;border-radius:20px;font-size:11.5px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;
+  }
+  .badge-purple{background:var(--purple-light);color:var(--purple);}
+  .badge-blue{background:var(--blue-light);color:var(--blue);}
+  .badge-success{background:var(--success-light);color:var(--success);}
+  .badge-warn{background:var(--warn-light);color:var(--warn);}
+  .badge-danger{background:var(--danger-light);color:var(--danger);}
+  .badge-muted{background:#F1F0F7;color:var(--muted);}
+
+  /* ---------- Header ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:30;
+    background:var(--surface-translucent);
+    backdrop-filter:blur(10px);
+    padding:16px 18px;
+    border-bottom:1px solid var(--border);
+  }
+  .topbar-inner{display:flex;align-items:center;justify-content:space-between;}
+  @media(min-width:768px){
+    .topbar{padding:14px 24px;}
+    .topbar-inner{max-width:1080px;margin:0 auto;}
+  }
+  .logo{display:flex;align-items:center;gap:9px;font-weight:900;font-size:19px;letter-spacing:-.3px;cursor:pointer;}
+  .logo .mark{
+    width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--grad-a),var(--grad-b));
+    display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;
+  }
+
+  /* ---------- Bottom nav ---------- */
+  .bottomnav{
+    position:fixed;bottom:0;left:0;right:0;z-index:40;
+    background:var(--card);border-top:1px solid var(--border);
+    padding:9px 8px calc(9px + env(safe-area-inset-bottom));
+  }
+  .bottomnav-inner{
+    max-width:520px;margin:0 auto;display:flex;justify-content:space-between;gap:2px;
+  }
+  @media(min-width:860px){.bottomnav-inner{max-width:900px;}}
+  @media(min-width:1180px){.bottomnav-inner{max-width:1080px;}}
+  .navitem{
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+    padding:8px 4px;border-radius:12px;cursor:pointer;color:var(--muted-light);border:none;background:none;
+  }
+  .navitem.active{color:var(--purple);background:var(--purple-light);}
+  .navitem span{font-size:10.5px;font-weight:700;}
+  @media(max-width:380px){
+    .navitem{padding:7px 2px;gap:3px;}
+    .navitem span{font-size:9.5px;}
+  }
+
+  /* ---------- Desktop/tablet "website" shell ---------- */
+  /* Below 768px: mobile app UI (bottom tab bar, full-bleed). 768px+: website UI (sidebar, contained). */
+  @media(min-width:768px){
+    .app-shell{padding-bottom:0;}
+    .app-body{display:flex;align-items:flex-start;gap:28px;max-width:1080px;margin:0 auto;padding:0 24px 60px;}
+    .app-main{flex:1;min-width:0;}
+    .bottomnav{
+      position:sticky;top:88px;bottom:auto;left:auto;right:auto;
+      width:226px;flex-shrink:0;
+      border-top:none;border:1px solid var(--border);border-radius:18px;
+      background:var(--card);padding:16px 10px;box-shadow:var(--shadow);
+      align-self:flex-start;
+    }
+    .bottomnav-inner{flex-direction:column;max-width:none;gap:3px;width:100%;}
+    .navitem{flex-direction:row;justify-content:flex-start;padding:13px 14px;gap:12px;border-radius:12px;}
+    .navitem span{font-size:13.5px;}
+    .page{padding:28px 0 10px;}
+  }
+  @media(min-width:1180px){
+    .app-body{max-width:1080px;}
+  }
+
+  /* ---------- Misc components ---------- */
+  .hero-img{
+    width:100%;height:170px;object-fit:cover;border-radius:var(--radius-lg);
+  }
+  .avatar{
+    width:42px;height:42px;border-radius:50%;
+    background:linear-gradient(135deg,var(--grad-a),var(--grad-b));
+    color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex-shrink:0;
+  }
+  .row{display:flex;align-items:center;}
+  .between{justify-content:space-between;}
+  .gap8{gap:8px;} .gap10{gap:10px;} .gap12{gap:12px;} .gap14{gap:14px;} .gap16{gap:16px;}
+  .muted{color:var(--muted);}
+  .small{font-size:13px;}
+  .tiny{font-size:11.5px;}
+  .bold{font-weight:700;}
+  .center{text-align:center;}
+  .divider{height:1px;background:var(--border);margin:16px 0;border:none;}
+
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;-ms-overflow-style:none;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab-chip{
+    padding:10px 16px;border-radius:12px;border:1.5px solid var(--border);background:var(--card);
+    font-size:13.5px;font-weight:700;color:var(--muted);cursor:pointer;white-space:nowrap;flex-shrink:0;
+  }
+  .tab-chip.active{background:linear-gradient(135deg,var(--grad-a),var(--grad-b));color:#fff;border-color:transparent;}
+
+  /* ---------- Weekly calendar ---------- */
+  .cal-grid{display:flex;flex-direction:column;gap:12px;}
+  @media(min-width:700px){.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:9px;}}
+  .cal-day{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:12px;}
+  .cal-day.today{border-color:var(--purple);box-shadow:0 0 0 2px var(--purple-light);}
+  .cal-day-head{display:flex;align-items:baseline;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+  .cal-day-name{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+  .cal-day-num{font-size:15px;font-weight:800;}
+  .cal-day-body{display:flex;flex-direction:column;gap:8px;min-height:22px;}
+  .cal-empty{font-size:11.5px;color:var(--muted-light);text-align:center;padding:6px 0;}
+  .cal-event{background:var(--purple-light);border-radius:10px;padding:8px 10px;}
+  .cal-event-time{font-size:10.5px;font-weight:800;color:var(--purple);}
+  .cal-event-title{font-size:12.5px;font-weight:700;margin-top:2px;}
+  .cal-event-sub{font-size:10.5px;color:var(--muted);margin-top:1px;}
+
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(20,12,45,.55);z-index:100;
+    display:flex;align-items:flex-end;justify-content:center;
+    backdrop-filter:blur(2px);
+  }
+  @media(min-width:640px){.modal-overlay{align-items:center;}}
+  .modal{
+    background:var(--card);border-radius:24px 24px 0 0;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;
+    padding:24px 20px calc(24px + env(safe-area-inset-bottom));
+    animation:slideUp .22s ease;
+  }
+  @media(min-width:640px){.modal{border-radius:24px;margin:16px;}}
+  @keyframes slideUp{from{transform:translateY(24px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+
+  /* ---------- Flyout panel: full screen on mobile, dropdown on desktop ---------- */
+  .flyout-scrim{
+    position:fixed;inset:0;z-index:150;background:transparent;
+  }
+  .flyout-panel{
+    position:fixed;inset:0;z-index:151;
+    width:100%;height:100%;
+    background:var(--card);
+    display:flex;flex-direction:column;
+    animation:flyoutSlideMobile .2s ease;
+  }
+  @keyframes flyoutSlideMobile{from{transform:translateX(28px);opacity:0;}to{transform:translateX(0);opacity:1;}}
+  @media(min-width:768px){
+    .flyout-panel{
+      inset:auto;top:70px;right:24px;left:auto;bottom:auto;
+      width:380px;max-width:calc(100vw - 48px);height:auto;max-height:calc(100vh - 100px);
+      border-radius:18px;border:1px solid var(--border);box-shadow:var(--shadow-md);
+      animation:flyoutSlideDesktop .16s ease;
+    }
+  }
+  @keyframes flyoutSlideDesktop{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+  .flyout-header{
+    display:flex;align-items:center;gap:10px;
+    padding:calc(16px + env(safe-area-inset-top)) 18px 16px;
+    border-bottom:1px solid var(--border);flex-shrink:0;
+  }
+  @media(min-width:768px){.flyout-header{padding:16px 18px;}}
+  .flyout-title{flex:1;min-width:0;margin:0;font-size:17px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .flyout-back{display:flex;flex-shrink:0;}
+  .flyout-close{display:none;flex-shrink:0;}
+  @media(min-width:768px){
+    .flyout-back{display:none;}
+    .flyout-close{display:flex;}
+  }
+  .flyout-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:18px 18px calc(24px + env(safe-area-inset-bottom));}
+  @media(max-width:380px){
+    .flyout-header{padding-left:14px;padding-right:14px;}
+    .flyout-body{padding-left:14px;padding-right:14px;}
+  }
+
+  .empty{
+    text-align:center;padding:48px 20px;color:var(--muted);
+  }
+  .empty .icon-wrap{
+    width:64px;height:64px;border-radius:50%;background:var(--purple-light);color:var(--purple);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 16px;
+  }
+
+  .list-item{
+    display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);
+  }
+  .list-item:last-child{border-bottom:none;}
+
+  .toast{
+    position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:200;
+    background:var(--text);color:#fff;padding:13px 20px;border-radius:13px;font-size:14px;font-weight:600;
+    box-shadow:var(--shadow-md); display:flex;align-items:center;gap:8px; max-width:90vw;
+    animation:toastIn .25s ease;
+  }
+  @keyframes toastIn{from{opacity:0;transform:translate(-50%,-10px);}to{opacity:1;transform:translate(-50%,0);}}
+  @keyframes prepPulse{0%{opacity:0;transform:scale(.7);}30%{opacity:1;transform:scale(1.08);}100%{opacity:1;transform:scale(1);}}
+  .prep-pulse{animation:prepPulse .5s ease;}
+
+  .progress-bar{height:8px;border-radius:6px;background:var(--border);overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(135deg,var(--grad-a),var(--grad-b));border-radius:6px;transition:width .3s ease;}
+
+  .qr-box{background:#fff;padding:16px;border-radius:16px;display:inline-block;border:1.5px solid var(--border);}
+
+  ::selection{background:var(--purple-light);}
+
+  /* ======================= MARKETING / LANDING PAGE ======================= */
+  .mkt{background:var(--bg);}
+  .mkt-container{max-width:1160px;margin:0 auto;padding:0 20px;}
+  @media(min-width:768px){.mkt-container{padding:0 40px;}}
+
+  .mkt-nav{
+    position:sticky;top:0;z-index:50;
+    background:var(--surface-translucent);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+    padding:14px 0;
+  }
+  .mkt-nav-inner{display:flex;align-items:center;justify-content:space-between;}
+  .mkt-links{display:none;gap:30px;align-items:center;}
+  .mkt-links a{font-size:14px;font-weight:600;color:var(--muted);text-decoration:none;cursor:pointer;}
+  .mkt-links a:hover{color:var(--purple);}
+  @media(min-width:820px){.mkt-links{display:flex;}}
+  .mkt-nav-cta{display:none;align-items:center;gap:10px;}
+  @media(min-width:820px){.mkt-nav-cta{display:flex;}}
+  .mkt-nav-mobile-toggle{display:flex;}
+  @media(min-width:820px){.mkt-nav-mobile-toggle{display:none;}}
+  .mkt-mobile-link{
+    display:block;width:100%;text-align:left;background:none;border:none;
+    padding:14px 4px;font-size:15px;font-weight:700;color:var(--text);cursor:pointer;
+    border-bottom:1px solid var(--border);
+  }
+  .mkt-account-option{
+    display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+    background:var(--card);border:1.5px solid var(--border);border-radius:16px;
+    padding:16px;cursor:pointer;margin-bottom:12px;font-family:inherit;
+  }
+  .mkt-account-option:hover{border-color:var(--purple);}
+
+  .mkt-hero{padding:52px 0 40px;}
+  @media(min-width:900px){.mkt-hero{padding:76px 0 60px;}}
+  .mkt-hero-grid{display:flex;flex-direction:column;gap:36px;align-items:center;}
+  @media(min-width:900px){.mkt-hero-grid{flex-direction:row;gap:52px;align-items:center;}}
+  .mkt-hero-copy{flex:1;min-width:0;}
+  .mkt-eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--purple-light);color:var(--purple);
+    padding:7px 14px;border-radius:20px;font-size:12.5px;font-weight:800;letter-spacing:.3px;
+    margin-bottom:20px;
+  }
+  .mkt-h1{
+    font-size:34px;line-height:1.14;font-weight:900;letter-spacing:-1px;margin:0 0 18px;
+  }
+  @media(min-width:600px){.mkt-h1{font-size:42px;}}
+  @media(min-width:1024px){.mkt-h1{font-size:50px;}}
+  .mkt-sub{font-size:16px;line-height:1.6;color:var(--muted);margin:0 0 28px;max-width:520px;}
+  @media(min-width:1024px){.mkt-sub{font-size:17.5px;}}
+  .mkt-cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:26px;}
+  .mkt-trust{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;font-weight:600;}
+  .mkt-trust .avstack{display:flex;}
+  .mkt-trust .avstack .avatar{width:28px;height:28px;font-size:11px;border:2px solid var(--bg);margin-left:-8px;}
+  .mkt-trust .avstack .avatar:first-child{margin-left:0;}
+
+  .mkt-hero-visual{flex:1;min-width:0;width:100%;position:relative;}
+  .mkt-hero-img-main{width:100%;height:300px;object-fit:cover;border-radius:24px;box-shadow:var(--shadow-md);}
+  @media(min-width:900px){.mkt-hero-img-main{height:420px;}}
+  .mkt-float-card{
+    position:absolute;background:var(--card);border-radius:16px;padding:14px 16px;box-shadow:var(--shadow-md);
+    display:flex;align-items:center;gap:12px;border:1px solid var(--border);
+  }
+  .mkt-float-1{bottom:-14px;left:0;}
+  @media(min-width:640px){.mkt-float-1{left:-14px;}}
+  .mkt-float-2{top:20px;right:-14px;display:none;}
+  @media(min-width:640px){.mkt-float-2{display:flex;}}
+
+  .mkt-stats{padding:30px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+  .mkt-stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;text-align:center;}
+  @media(min-width:640px){.mkt-stats-grid{grid-template-columns:repeat(4,1fr);}}
+  .mkt-stat-num{font-size:26px;font-weight:900;}
+  @media(min-width:900px){.mkt-stat-num{font-size:32px;}}
+  .mkt-stat-label{font-size:12.5px;color:var(--muted);font-weight:700;margin-top:4px;}
+
+  .mkt-section{padding:64px 0;}
+  .mkt-section-head{max-width:640px;margin:0 auto 40px;text-align:center;}
+  .mkt-h2{font-size:27px;font-weight:900;letter-spacing:-.6px;margin:0 0 12px;}
+  @media(min-width:900px){.mkt-h2{font-size:33px;}}
+  .mkt-section-sub{font-size:15.5px;color:var(--muted);line-height:1.6;margin:0;}
+
+  .mkt-feature-grid{display:grid;grid-template-columns:1fr;gap:18px;}
+  @media(min-width:640px){.mkt-feature-grid{grid-template-columns:1fr 1fr;}}
+  @media(min-width:1024px){.mkt-feature-grid{grid-template-columns:repeat(4,1fr);}}
+  .mkt-feature-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:26px 22px;box-shadow:var(--shadow);}
+  .mkt-feature-icon{
+    width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;
+  }
+  .mkt-feature-card h4{margin:0 0 8px;font-size:16px;font-weight:800;}
+  .mkt-feature-card p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.6;}
+
+  .mkt-split{display:flex;flex-direction:column;gap:36px;align-items:center;}
+  @media(min-width:940px){.mkt-split{flex-direction:row;gap:60px;}}
+  .mkt-split.reverse{flex-direction:column-reverse;}
+  @media(min-width:940px){.mkt-split.reverse{flex-direction:row-reverse;}}
+  .mkt-split-copy{flex:1;min-width:0;}
+  .mkt-split-visual{flex:1;min-width:0;width:100%;}
+  .mkt-split-img{width:100%;height:280px;object-fit:cover;border-radius:22px;box-shadow:var(--shadow-md);}
+  .mkt-check-list{list-style:none;margin:22px 0 28px;padding:0;display:flex;flex-direction:column;gap:14px;}
+  .mkt-check-list li{display:flex;align-items:flex-start;gap:12px;font-size:14.5px;color:var(--text);}
+  .mkt-check-list .tick{
+    width:22px;height:22px;min-width:22px;border-radius:50%;background:var(--success-light);color:var(--success);
+    display:flex;align-items:center;justify-content:center;margin-top:1px;
+  }
+
+  .mkt-dash-preview{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:22px;box-shadow:var(--shadow-md);}
+  .mkt-dash-preview .grid-2{gap:12px;}
+  .mkt-dash-preview .card{box-shadow:none;padding:16px;}
+
+  .mkt-steps{display:grid;grid-template-columns:1fr;gap:20px;}
+  @media(min-width:820px){.mkt-steps{grid-template-columns:repeat(3,1fr);}}
+  .mkt-step{position:relative;padding:26px 22px;background:var(--card);border-radius:20px;border:1px solid var(--border);}
+  .mkt-step-num{
+    width:36px;height:36px;border-radius:11px;
+    background:linear-gradient(135deg,var(--grad-a),var(--grad-b));color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;margin-bottom:16px;
+  }
+  .mkt-step h4{margin:0 0 8px;font-size:15.5px;font-weight:800;}
+  .mkt-step p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.6;}
+
+  .mkt-cta-band{
+    border-radius:28px;padding:44px 28px;text-align:center;color:#fff;
+    background:linear-gradient(135deg,var(--grad-a),var(--grad-b));
+    position:relative;overflow:hidden;
+  }
+  @media(min-width:900px){.mkt-cta-band{padding:60px 40px;}}
+  .mkt-cta-band h2{font-size:25px;font-weight:900;margin:0 0 12px;letter-spacing:-.5px;}
+  @media(min-width:900px){.mkt-cta-band h2{font-size:31px;}}
+  .mkt-cta-band p{font-size:15px;opacity:.92;margin:0 0 26px;max-width:480px;margin-left:auto;margin-right:auto;}
+  .mkt-cta-band .btn-primary{background:#fff;color:var(--purple);box-shadow:none;}
+
+  .mkt-footer{padding:40px 0 32px;border-top:1px solid var(--border);}
+  .mkt-footer-top{display:flex;flex-direction:column;gap:28px;margin-bottom:28px;}
+  @media(min-width:768px){.mkt-footer-top{flex-direction:row;justify-content:space-between;}}
+  .mkt-footer-links{display:flex;gap:28px;flex-wrap:wrap;}
+  .mkt-footer-links a{font-size:13.5px;color:var(--muted);text-decoration:none;font-weight:600;cursor:pointer;}
+  .mkt-footer-links a:hover{color:var(--purple);}
+  .mkt-footer-bottom{display:flex;flex-direction:column;gap:10px;font-size:12.5px;color:var(--muted-light);}
+  @media(min-width:768px){.mkt-footer-bottom{flex-direction:row;justify-content:space-between;align-items:center;}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const {useState, useReducer, useEffect, useRef, createContext, useContext} = React;
+
+/* ======================= ICONS ======================= */
+function Icon({name, size=20, strokeWidth=2, color="currentColor"}){
+  const p = {fill:"none", stroke:color, strokeWidth, strokeLinecap:"round", strokeLinejoin:"round"};
+  const paths = {
+    home:<path {...p} d="M4 11.5 12 4l8 7.5M6 10v9a1 1 0 0 0 1 1h4v-6h2v6h4a1 1 0 0 0 1-1v-9"/>,
+    dumbbell:<g {...p}><path d="M6.5 8v8M17.5 8v8M2.5 10v4M21.5 10v4M6.5 12h11"/></g>,
+    building:<g {...p}><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M9 8h.01M9 12h.01M9 16h.01M15 8h.01M15 12h.01M15 16h.01"/></g>,
+    calendar:<g {...p}><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M8 3v4M16 3v4M3.5 10h17"/></g>,
+    qrcode:<g {...p}><rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1"/><path d="M14 14h3v3h-3zM20.5 14v3M17.5 20.5h3"/></g>,
+    user:<g {...p}><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20.5c1.4-4 4-6 7.5-6s6.1 2 7.5 6"/></g>,
+    back:<path {...p} d="M15 19 7 12l8-7"/>,
+    check:<path {...p} d="M4 12.5 9.5 18 20 6"/>,
+    checkCircle:<g {...p}><circle cx="12" cy="12" r="9"/><path d="M8 12.5 11 15.5 16 9"/></g>,
+    star:<path {...p} strokeLinejoin="round" fill={color==="currentColor"?"none":color} d="m12 3 2.7 5.9 6.3.7-4.7 4.4 1.2 6.3L12 17.2 6.5 20.3l1.2-6.3-4.7-4.4 6.3-.7Z"/>,
+    mapPin:<g {...p}><path d="M12 21s7-6.3 7-11.5A7 7 0 0 0 5 9.5C5 14.7 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.4"/></g>,
+    clock:<g {...p}><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></g>,
+    plus:<path {...p} d="M12 5v14M5 12h14"/>,
+    chevronRight:<path {...p} d="m9 5 7 7-7 7"/>,
+    close:<path {...p} d="m6 6 12 12M18 6 6 18"/>,
+    scan:<g {...p}><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16"/><path d="M4 12h16"/></g>,
+    bolt:<path {...p} strokeLinejoin="round" d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/>,
+    flame:<path {...p} d="M12 22c4 0 7-2.7 7-7 0-3-1.8-4.7-3-6.5-.3 2-1.3 3-2.3 2 .8-3 -.5-6-3.7-8 .5 3-1.3 4.7-3 7-1.3 1.8-2 3.3-2 5.5 0 4.3 3 7 7 7Z"/>,
+    logout:<g {...p}><path d="M9 21H5a1.5 1.5 0 0 1-1.5-1.5v-15A1.5 1.5 0 0 1 5 3h4"/><path d="M16 17l5-5-5-5M21 12H9"/></g>,
+    edit:<path {...p} d="m17 3 4 4L9 19l-4.5 1L6 15.5Z"/>,
+    trash:<g {...p}><path d="M3.5 6h17M8.5 6V4.5a1.5 1.5 0 0 1 1.5-1.5h4a1.5 1.5 0 0 1 1.5 1.5V6m3 0v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14Z"/><path d="M10 10.5v7M14 10.5v7"/></g>,
+    ticket:<path {...p} d="M4 8.5A1.5 1.5 0 0 1 5.5 7h13A1.5 1.5 0 0 1 20 8.5v1a1.5 1.5 0 0 0 0 3v1a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 13.5v-1a1.5 1.5 0 0 0 0-3Z"/>,
+    dollar:<g {...p}><circle cx="12" cy="12" r="9"/><path d="M12 6.5v11M15 9.2c0-1.2-1.3-2.2-3-2.2s-3 .9-3 2.2 1.3 2 3 2 3 .8 3 2.1-1.3 2.2-3 2.2-3-1-3-2.2"/></g>,
+    users:<g {...p}><circle cx="8.5" cy="8" r="3.2"/><path d="M2.5 20c1-3.4 3.3-5.2 6-5.2s5 1.8 6 5.2"/><circle cx="17" cy="8.5" r="2.6"/><path d="M16 12.2c2.3.3 4 1.9 4.8 4.6"/></g>,
+    megaphone:<g {...p}><path d="M4 11v2a2 2 0 0 0 2 2h1l1.5 5H11l-1-5h1l8 4V6l-8 4H6a2 2 0 0 0-2 1Z"/></g>,
+    trophy:<g {...p}><path d="M8 4h8v5a4 4 0 0 1-8 0Z"/><path d="M8 5H5.5A1.5 1.5 0 0 0 4 6.5C4 9 5.5 10 8 10M16 5h2.5A1.5 1.5 0 0 1 20 6.5C20 9 18.5 10 16 10M9.5 17h5M12 13v4M8 21h8"/></g>,
+    play:<path {...p} strokeLinejoin="round" fill={color==="currentColor"?"none":color} d="M7 4.5v15l13-7.5Z"/>,
+    settings:<g {...p}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></g>,
+    sun:<g {...p}><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M2.5 12H5M19 12h2.5M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></g>,
+    moon:<path {...p} d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/>,
+    phone:<path {...p} d="M7 3.5h2.6l1 4-2 1.5a11.5 11.5 0 0 0 5.4 5.4l1.5-2 4 1v2.6a1.5 1.5 0 0 1-1.6 1.5A15.5 15.5 0 0 1 5.5 5.1 1.5 1.5 0 0 1 7 3.5Z"/>,
+    upload:<g {...p}><path d="M12 15.5V4M7.5 8.5 12 4l4.5 4.5"/><path d="M4.5 15.5V19a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5v-3.5"/></g>,
+    camera:<g {...p}><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h1.8l1-1.6a1.5 1.5 0 0 1 1.3-.9h4.8a1.5 1.5 0 0 1 1.3.9L16.7 7h1.8A1.5 1.5 0 0 1 20 8.5v9A1.5 1.5 0 0 1 18.5 19h-13A1.5 1.5 0 0 1 4 17.5Z"/><circle cx="12" cy="13" r="3.3"/></g>,
+    pause:<g {...p}><rect x="6" y="4.5" width="4" height="15" rx="1"/><rect x="14" y="4.5" width="4" height="15" rx="1"/></g>,
+    bell:<g {...p}><path d="M6 10a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 14 6 10Z"/><path d="M9.5 18.5a2.5 2.5 0 0 0 5 0"/></g>,
+    menu:<g {...p}><path d="M4 6.5h16M4 12h16M4 17.5h16"/></g>,
+    volume:<g {...p}><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4Z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></g>,
+    volumeOff:<g {...p}><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4Z"/><path d="m16 9 5 6M21 9l-5 6"/></g>,
+    lock:<g {...p}><rect x="5" y="10.5" width="14" height="9" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></g>,
+    unlock:<g {...p}><rect x="5" y="10.5" width="14" height="9" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 7.5-2"/></g>,
+    share:<g {...p}><circle cx="18" cy="5.5" r="2.3"/><circle cx="6" cy="12" r="2.3"/><circle cx="18" cy="18.5" r="2.3"/><path d="m8.1 10.8 7.8-4.4M8.1 13.2l7.8 4.4"/></g>,
+    download:<g {...p}><path d="M12 3.5v11M7.5 10l4.5 4.5L16.5 10"/><path d="M4.5 17v2A1.5 1.5 0 0 0 6 20.5h12a1.5 1.5 0 0 0 1.5-1.5v-2"/></g>,
+    shield:<g {...p}><path d="M12 3.5 5 6v5.5c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6Z"/><path d="m8.7 12 2.3 2.3 4.3-4.6"/></g>,
+    gift:<g {...p}><rect x="4" y="9" width="16" height="11" rx="1"/><path d="M4 9h16M12 9v11M12 9C10 6 7 5 6 6.5S7.5 9 12 9ZM12 9c2-3 5-4 6-2.5S16.5 9 12 9Z"/></g>,
+    barbell:<g {...p}><path d="M6.5 6v12M17.5 6v12M2.5 9v6M21.5 9v6M6.5 12h11"/></g>,
+    location:<g {...p}><path d="M12 21s7-6.3 7-11.5A7 7 0 0 0 5 9.5C5 14.7 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.4"/></g>,
+    image:<g {...p}><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m5 18 5-5 3.5 3.5L18 12l1.5 1.5"/></g>,
+  };
+  return <svg width={size} height={size} viewBox="0 0 24 24">{paths[name]||null}</svg>;
+}
+
+/* ======================= MOCK DATA ======================= */
+const IMG = {
+  gymHero: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1200&q=70",
+  gym1: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=70",
+  gym2: "https://images.unsplash.com/photo-1594737625785-a6cbdabd333c?auto=format&fit=crop&w=800&q=70",
+  gym3: "https://images.unsplash.com/photo-1550345332-09e3ac987658?auto=format&fit=crop&w=800&q=70",
+  gym4: "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&w=800&q=70",
+  gym5: "https://images.unsplash.com/photo-1571731956672-f2b94d7dd0cb?auto=format&fit=crop&w=800&q=70",
+  gym6: "https://images.unsplash.com/photo-1554284126-aa88f22d8b74?auto=format&fit=crop&w=800&q=70",
+  workout1: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=70",
+  workout2: "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=70",
+  workout3: "https://images.unsplash.com/photo-1434608519344-49d77a699e1d?auto=format&fit=crop&w=800&q=70",
+  workout4: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=800&q=70",
+  workout5: "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=format&fit=crop&w=800&q=70",
+  workout6: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&w=800&q=70",
+  landing: "https://images.unsplash.com/photo-1571731956672-f2b94d7dd0cb?auto=format&fit=crop&w=1200&q=70",
+};
+
+const AREAS = ["All Areas","Bole","Kazanchis","CMC","Sarbet","Merkato","Hawassa"];
+
+const WORKOUTS = [
+  {id:"w1", title:"Full Body Burn", category:"Full Body", level:"Beginner", duration:20, calories:180, image:IMG.workout1,
+    exercises:[{name:"Jumping Jacks",detail:"45 sec"},{name:"Bodyweight Squats",detail:"15 reps"},{name:"Push-Ups",detail:"12 reps"},{name:"Reverse Lunges",detail:"12 reps / leg"},{name:"Plank Hold",detail:"30 sec"},{name:"Mountain Climbers",detail:"40 sec"}]},
+  {id:"w2", title:"Abs & Core Sculpt", category:"Core", level:"Intermediate", duration:15, calories:120, image:IMG.workout4,
+    exercises:[{name:"Crunches",detail:"20 reps"},{name:"Leg Raises",detail:"15 reps"},{name:"Russian Twists",detail:"20 reps"},{name:"Side Plank",detail:"25 sec / side"},{name:"Bicycle Crunches",detail:"20 reps"}]},
+  {id:"w3", title:"Cardio Blast", category:"Cardio", level:"All Levels", duration:25, calories:220, image:IMG.workout3,
+    exercises:[{name:"High Knees",detail:"40 sec"},{name:"Butt Kicks",detail:"40 sec"},{name:"Jump Squats",detail:"15 reps"},{name:"Burpees",detail:"10 reps"},{name:"Skater Jumps",detail:"40 sec"},{name:"Jog In Place",detail:"60 sec"}]},
+  {id:"w4", title:"No-Equipment HIIT", category:"HIIT", level:"Advanced", duration:20, calories:250, image:IMG.workout6,
+    exercises:[{name:"Squat Jumps",detail:"15 reps"},{name:"Push-Up to Plank",detail:"12 reps"},{name:"Burpees",detail:"12 reps"},{name:"High Knees",detail:"40 sec"},{name:"Plank Jacks",detail:"40 sec"}]},
+  {id:"w5", title:"Morning Yoga Flow", category:"Yoga", level:"Beginner", duration:18, calories:90, image:IMG.workout2,
+    exercises:[{name:"Cat-Cow Stretch",detail:"60 sec"},{name:"Downward Dog",detail:"45 sec"},{name:"Warrior I",detail:"30 sec / side"},{name:"Child's Pose",detail:"45 sec"},{name:"Seated Twist",detail:"30 sec / side"}]},
+  {id:"w6", title:"Strength Foundations", category:"Strength", level:"Beginner", duration:22, calories:160, image:IMG.workout5,
+    exercises:[{name:"Squats",detail:"15 reps"},{name:"Glute Bridges",detail:"15 reps"},{name:"Incline Push-Ups",detail:"12 reps"},{name:"Superman Hold",detail:"30 sec"},{name:"Wall Sit",detail:"40 sec"}]},
+];
+const WORKOUT_CATS = ["All","Full Body","Core","Cardio","HIIT","Yoga","Strength"];
+
+function seedGyms(){
+  return [
+    {id:"g1", name:"Iron Addis Gym", area:"Bole", city:"Addis Ababa", rating:4.8, reviews:214,
+      image:IMG.gym1, cover:IMG.gym1,
+      description:"A premium strength & conditioning gym in the heart of Bole, with free weights, machines, and a dedicated CrossFit box.",
+      amenities:["Free Weights","Cardio Zone","Locker Rooms","Personal Trainers","Parking"],
+      dayPassPrice:150,
+      plans:[{id:"p1",name:"Monthly",price:1200,period:"month"},{id:"p2",name:"Quarterly",price:3200,period:"3 months"},{id:"p3",name:"Annual",price:11000,period:"year"}],
+      classesSeed:[
+        {id:"c1",title:"HIIT Blast",day:"Mon / Wed / Fri",time:"6:30 AM",instructor:"Selam T.",capacity:20,price:100},
+        {id:"c2",title:"Strength Circuit",day:"Tue / Thu",time:"5:30 PM",instructor:"Dawit A.",capacity:16,price:120},
+      ],
+      updatesSeed:[
+        {id:"u1", date:"Jun 28, 2026", text:"New squat rack and dumbbell set (up to 40kg) now available on the main floor!"},
+        {id:"u2", date:"Jun 20, 2026", text:"July promo: refer a friend and both get 15% off your next renewal."},
+      ],
+      membersSeed:[
+        {userId:"demo-u1", name:"Nahom Girma", phone:"0911 22 33 44", plan:"Monthly", since:"May 2, 2026", status:"active"},
+        {userId:"demo-u2", name:"Betelhem Kassa", phone:"0922 33 44 55", plan:"Annual", since:"Feb 14, 2026", status:"active"},
+      ],
+      dayPassesSeed:[{userId:"demo-u3", name:"Robel Mekonnen", phone:"0933 44 55 66", date:"Jul 2, 2026"}],
+      postsSeed:[
+        {id:"post1", image:IMG.gym1, caption:"New squat racks just landed on the main floor 💪", date:"Jun 28, 2026"},
+        {id:"post2", image:IMG.workout1, caption:"Saturday morning crew putting in the work.", date:"Jun 15, 2026"},
+      ],
+      reviewsListSeed:[
+        {id:"rev1", userId:"demo-u2", name:"Betelhem Kassa", rating:5, text:"Clean equipment and the trainers actually pay attention. Worth every birr.", date:"Jun 10, 2026"},
+      ],
+    },
+    {id:"g2", name:"Sheger Fitness Club", area:"Kazanchis", city:"Addis Ababa", rating:4.6, reviews:132,
+      image:IMG.gym2, cover:IMG.gym2,
+      description:"A friendly neighborhood gym focused on functional training, group classes, and a supportive community vibe.",
+      amenities:["Group Classes","Cardio Zone","Showers","Sauna"],
+      dayPassPrice:120,
+      plans:[{id:"p1",name:"Monthly",price:1000,period:"month"},{id:"p2",name:"Quarterly",price:2700,period:"3 months"}],
+      classesSeed:[
+        {id:"c1",title:"Zumba Habesha",day:"Mon / Thu",time:"7:00 PM",instructor:"Liya M.",capacity:25,price:80},
+        {id:"c2",title:"Spin Cycle",day:"Wed / Sat",time:"6:00 AM",instructor:"Yonas B.",capacity:15,price:100},
+      ],
+      updatesSeed:[{id:"u1", date:"Jun 25, 2026", text:"Sauna room reopened after maintenance — free for all members this week."}],
+      membersSeed:[{userId:"demo-u4", name:"Meron Alemu", phone:"0944 55 66 77", plan:"Monthly", since:"Apr 9, 2026", status:"active"}],
+      dayPassesSeed:[],
+      postsSeed:[{id:"post1", image:IMG.gym2, caption:"Our newly reopened sauna room is open all week!", date:"Jun 25, 2026"}],
+    },
+    {id:"g3", name:"Habesha FitZone", area:"CMC", city:"Addis Ababa", rating:4.7, reviews:98,
+      image:IMG.gym3, cover:IMG.gym3,
+      description:"Modern equipment, spacious floor, and specialty classes for every fitness level — from beginners to competitive athletes.",
+      amenities:["Free Weights","Machines","Boxing Bags","Nutrition Coaching"],
+      dayPassPrice:130,
+      plans:[{id:"p1",name:"Monthly",price:1100,period:"month"},{id:"p2",name:"Annual",price:10500,period:"year"}],
+      classesSeed:[{id:"c1",title:"Boxing Basics",day:"Tue / Fri",time:"6:00 PM",instructor:"Kalab W.",capacity:12,price:110}],
+      updatesSeed:[{id:"u1", date:"Jun 30, 2026", text:"New boxing bags installed — Boxing Basics class now has 4 more spots."}],
+      membersSeed:[],
+      dayPassesSeed:[],
+      postsSeed:[{id:"post1", image:IMG.gym3, caption:"New boxing bags are in — first session is on the house.", date:"Jun 30, 2026"}],
+    },
+    {id:"g4", name:"Bole Strength House", area:"Bole", city:"Addis Ababa", rating:4.9, reviews:301,
+      image:IMG.gym4, cover:IMG.gym4,
+      description:"Serious powerlifting and bodybuilding gym with top-tier equipment and experienced coaches.",
+      amenities:["Powerlifting Platform","Free Weights","Personal Trainers","Parking","Locker Rooms"],
+      dayPassPrice:180,
+      plans:[{id:"p1",name:"Monthly",price:1500,period:"month"},{id:"p2",name:"Quarterly",price:4000,period:"3 months"},{id:"p3",name:"Annual",price:14000,period:"year"}],
+      classesSeed:[{id:"c1",title:"Strength Circuit",day:"Mon / Wed / Fri",time:"5:00 PM",instructor:"Amanuel S.",capacity:14,price:150}],
+      updatesSeed:[{id:"u1", date:"Jun 18, 2026", text:"Powerlifting platform #2 now open — book your slot at the front desk."}],
+      membersSeed:[{userId:"demo-u5", name:"Hana Tesfaye", phone:"0955 66 77 88", plan:"Quarterly", since:"Mar 1, 2026", status:"active"}],
+      dayPassesSeed:[],
+      postsSeed:[
+        {id:"post1", image:IMG.gym4, caption:"Platform #2 is officially open for business.", date:"Jun 18, 2026"},
+        {id:"post2", image:IMG.workout6, caption:"Foundations never go out of style.", date:"Jun 5, 2026"},
+      ],
+      reviewsListSeed:[
+        {id:"rev1", userId:"demo-u5", name:"Hana Tesfaye", rating:5, text:"Best platform setup in Bole. Coaches know their stuff.", date:"May 20, 2026"},
+      ],
+    },
+    {id:"g5", name:"Merkato PowerGym", area:"Merkato", city:"Addis Ababa", rating:4.4, reviews:76,
+      image:IMG.gym5, cover:IMG.gym5,
+      description:"Budget-friendly gym with the essentials done right — clean space, solid equipment, and flexible hours.",
+      amenities:["Free Weights","Cardio Zone","Extended Hours"],
+      dayPassPrice:90,
+      plans:[{id:"p1",name:"Monthly",price:700,period:"month"},{id:"p2",name:"Quarterly",price:1900,period:"3 months"}],
+      classesSeed:[{id:"c1",title:"Beginner Circuit",day:"Sat / Sun",time:"9:00 AM",instructor:"Tariku G.",capacity:20,price:60}],
+      updatesSeed:[],
+      membersSeed:[],
+      dayPassesSeed:[],
+    },
+    {id:"g6", name:"Hawassa Lakeside Fitness", area:"Hawassa", city:"Hawassa", rating:4.7, reviews:64,
+      image:IMG.gym6, cover:IMG.gym6,
+      description:"Open-air and indoor training with a view of the lake. Popular for morning runs and group HIIT sessions.",
+      amenities:["Outdoor Area","Cardio Zone","Group Classes","Parking"],
+      dayPassPrice:100,
+      plans:[{id:"p1",name:"Monthly",price:850,period:"month"},{id:"p2",name:"Annual",price:8500,period:"year"}],
+      classesSeed:[{id:"c1",title:"Lakeside HIIT",day:"Daily",time:"6:00 AM",instructor:"Firehiwot D.",capacity:30,price:70}],
+      updatesSeed:[{id:"u1", date:"Jun 22, 2026", text:"Lakeside HIIT now runs daily by popular demand — first session free for new members."}],
+      membersSeed:[],
+      dayPassesSeed:[],
+    },
+  ].map(g => ({
+    ...g,
+    classes: g.classesSeed.map(c => ({...c, attendees:[]})),
+    updates: g.updatesSeed,
+    members: g.membersSeed.map(m => {
+      const plan = g.plans.find(p=>p.name===m.plan);
+      const period = plan ? plan.period : "month";
+      const sinceDate = new Date(m.since);
+      const due = isNaN(sinceDate) ? addDays(TODAY, 20) : addDays(sinceDate, periodToDays(period));
+      return {...m, paymentStatus: "paid", lastPaid: m.since, dueDate: fmtDate(due)};
+    }),
+    dayPasses: g.dayPassesSeed,
+    posts: g.postsSeed || [],
+    reviewsList: g.reviewsListSeed || [],
+  }));
+}
+
+function seedCheckins(){
+  const mk = (userId, name, gymId, gymName, daysAgo, time) => ({
+    id: genId("chk"), userId, name, gymId, gymName, date: addDays(TODAY, -daysAgo), time,
+  });
+  return [
+    mk("demo-u1","Nahom Girma","g1","Iron Addis Gym", 1, "6:45 AM"),
+    mk("demo-u1","Nahom Girma","g1","Iron Addis Gym", 3, "6:30 AM"),
+    mk("demo-u2","Betelhem Kassa","g1","Iron Addis Gym", 5, "5:15 PM"),
+    mk("demo-u1","Nahom Girma","g1","Iron Addis Gym", 12, "7:00 AM"),
+    mk("demo-u2","Betelhem Kassa","g1","Iron Addis Gym", 40, "5:30 PM"),
+    mk("demo-u1","Nahom Girma","g1","Iron Addis Gym", 95, "6:15 AM"),
+    mk("demo-u5","Hana Tesfaye","g4","Bole Strength House", 2, "5:00 PM"),
+    mk("demo-u5","Hana Tesfaye","g4","Bole Strength House", 20, "5:10 PM"),
+    mk("demo-u5","Hana Tesfaye","g4","Bole Strength House", 50, "5:05 PM"),
+  ];
+}
+
+function seedPayments(){
+  const mk = (userId, name, gymId, plan, amount, daysAgo) => ({
+    id: genId("pay"), userId, name, gymId, plan, amount, date: addDays(TODAY, -daysAgo),
+  });
+  return [
+    mk("demo-u1","Nahom Girma","g1","Monthly",1200, 28),
+    mk("demo-u1","Nahom Girma","g1","Monthly",1200, 58),
+    mk("demo-u1","Nahom Girma","g1","Monthly",1200, 88),
+    mk("demo-u2","Betelhem Kassa","g1","Annual",11000, 140),
+    mk("demo-u5","Hana Tesfaye","g4","Quarterly",4000, 95),
+    mk("demo-u5","Hana Tesfaye","g4","Quarterly",4000, 275),
+  ];
+}
+
+function genId(prefix){ return prefix + "-" + Math.random().toString(36).slice(2,8); }
+function genCode(){ return "GBD-" + Math.random().toString(36).slice(2,8).toUpperCase(); }
+function genOtp(){ return String(Math.floor(100000 + Math.random()*900000)); }
+function fileToDataUrl(file){
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+    reader.onload = ()=>resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+/* ---------- Date helpers (app runs on a fixed simulated "today") ---------- */
+const TODAY = new Date(2026, 6, 3); // Jul 3, 2026
+const MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const DAY_ABBR = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+function fmtDate(d){ return `${MONTH_NAMES[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`; }
+function addDays(d, n){ const r = new Date(d); r.setDate(r.getDate()+n); return r; }
+function daysBetween(a, b){ return Math.round((b - a) / 86400000); }
+function isoDate(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
+function periodToDays(period){
+  if(!period) return 30;
+  if(period.includes("year")) return 365;
+  const m = period.match(/(\d+)/);
+  const months = m ? parseInt(m[1],10) : 1;
+  return months*30;
+}
+function monthsSince(dateStr){
+  const d = new Date(dateStr);
+  if(isNaN(d)) return 0;
+  return (TODAY.getFullYear()-d.getFullYear())*12 + (TODAY.getMonth()-d.getMonth()) - (TODAY.getDate()<d.getDate()?1:0);
+}
+function weekDates(){
+  // Monday-start week containing TODAY
+  const dow = TODAY.getDay(); // 0=Sun
+  const mondayOffset = dow===0 ? -6 : 1-dow;
+  const monday = addDays(TODAY, mondayOffset);
+  return Array.from({length:7}, (_,i)=>addDays(monday, i));
+}
+
+/* ---------- Sound effects (Web Audio API — no external files) ---------- */
+let _audioCtx = null;
+function getAudioCtx(){
+  if(!_audioCtx){
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(AC) _audioCtx = new AC();
+  }
+  return _audioCtx;
+}
+function playTone(freq=440, duration=0.14, type="sine", volume=0.14, delay=0){
+  try{
+    const ctx = getAudioCtx();
+    if(!ctx) return;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    gain.gain.value = volume;
+    osc.connect(gain); gain.connect(ctx.destination);
+    const t0 = ctx.currentTime + delay;
+    osc.start(t0);
+    gain.gain.setValueAtTime(volume, t0);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+    osc.stop(t0 + duration + 0.02);
+  }catch(e){}
+}
+const sound = {
+  tick: ()=> playTone(700, 0.06, "sine", 0.05),
+  tickUrgent: ()=> playTone(1046, 0.09, "square", 0.13),
+  click: ()=> playTone(320, 0.05, "square", 0.08),
+  phaseComplete: ()=> { playTone(660, 0.12, "sine", 0.13); playTone(880, 0.16, "sine", 0.13, 0.1); },
+  workoutComplete: ()=> { playTone(523, 0.16, "sine", 0.15); playTone(659, 0.16, "sine", 0.15, 0.13); playTone(784, 0.28, "sine", 0.16, 0.26); },
+  ready: ()=> playTone(440, 0.2, "sine", 0.14),
+  set: ()=> playTone(550, 0.2, "sine", 0.14),
+  go: ()=> playTone(740, 0.3, "sine", 0.18),
+};
+
+/* ---------- Shareable badge image (canvas, no external assets) ---------- */
+function generateBadgeDataUrl(userName, weekLabel){
+  const canvas = document.createElement("canvas");
+  canvas.width = 800; canvas.height = 800;
+  const ctx = canvas.getContext("2d");
+  const grad = ctx.createLinearGradient(0,0,800,800);
+  grad.addColorStop(0,"#6D28D9");
+  grad.addColorStop(1,"#2563EB");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,800,800);
+  ctx.strokeStyle = "rgba(255,255,255,0.25)";
+  ctx.lineWidth = 14;
+  ctx.beginPath(); ctx.arc(400,325,215,0,Math.PI*2); ctx.stroke();
+  ctx.fillStyle = "rgba(255,255,255,0.12)";
+  ctx.beginPath(); ctx.arc(400,325,188,0,Math.PI*2); ctx.fill();
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.font = "160px sans-serif";
+  ctx.fillText("🏆", 400, 335);
+  ctx.fillStyle = "#fff";
+  ctx.font = "900 52px Arial, sans-serif";
+  ctx.fillText("WEEK COMPLETE", 400, 565);
+  ctx.globalAlpha = 0.9;
+  ctx.font = "28px Arial, sans-serif";
+  ctx.fillText(weekLabel, 400, 612);
+  ctx.globalAlpha = 1;
+  ctx.font = "700 36px Arial, sans-serif";
+  ctx.fillText(userName, 400, 670);
+  ctx.globalAlpha = 0.85;
+  ctx.font = "24px Arial, sans-serif";
+  ctx.fillText("GymBuddy · 7/7 days trained", 400, 724);
+  ctx.globalAlpha = 1;
+  return canvas.toDataURL("image/png");
+}
+
+/* ======================= REDUCER ======================= */
+const initialState = {
+  screen: "marketing",      // marketing | onboardCustomer | onboardOwner | app
+  role: null,               // customer | owner
+  user: null,               // {id, name, phone, area, code, phoneVerified, smsOptIn, completedDays}
+  ownerGymId: null,
+  gyms: seedGyms(),
+  checkins: seedCheckins(), // {id, userId, name, gymId, gymName, date(Date), time}
+  payments: seedPayments(), // {id, gymId, userId, name, plan, amount, date(Date)}
+  toast: null,
+  theme: "light",           // light | dark
+};
+
+function reducer(state, action){
+  switch(action.type){
+    case "SET_SCREEN": return {...state, screen: action.screen};
+    case "SET_ROLE": return {...state, role: action.role};
+    case "SET_TOAST": return {...state, toast: action.msg};
+    case "CLEAR_TOAST": return {...state, toast: null};
+    case "TOGGLE_THEME": return {...state, theme: state.theme==="light" ? "dark" : "light"};
+    case "CREATE_CUSTOMER": {
+      const user = {id: genId("u"), name: action.name, phone: action.phone, area: action.area, code: genCode(), joined: "Jul 3, 2026", phoneVerified: true, smsOptIn: action.smsOptIn!==false, completedDays: {}};
+      return {...state, user, role:"customer", screen:"app"};
+    }
+    case "CREATE_OWNER_GYM": {
+      const g = {
+        id: genId("gym"), name: action.name, area: action.area, city: action.city || "Addis Ababa",
+        rating: 5.0, reviews: 0, image: action.image, cover: action.image,
+        description: action.description, amenities: action.amenities || [],
+        dayPassPrice: Number(action.dayPassPrice)||100,
+        plans: [], classes: [], updates: [], members: [], dayPasses: [], posts: [], reviewsList: [],
+      };
+      return {...state, gyms:[g, ...state.gyms], ownerGymId: g.id, role:"owner", screen:"app"};
+    }
+    case "MANAGE_EXISTING_GYM": {
+      return {...state, ownerGymId: action.gymId, role:"owner", screen:"app"};
+    }
+    case "SWITCH_ROLE": {
+      return {...state, screen:"marketing", role:null};
+    }
+    case "LOGOUT": {
+      return {...initialState, gyms: state.gyms, checkins: state.checkins, payments: state.payments, theme: state.theme};
+    }
+    case "JOIN_GYM": {
+      const gyms = state.gyms.map(g=>{
+        if(g.id !== action.gymId) return g;
+        const plan = g.plans.find(p=>p.name===action.planName);
+        const dueDate = fmtDate(addDays(TODAY, periodToDays(plan ? plan.period : "month")));
+        const member = {userId: state.user.id, name: state.user.name, phone: state.user.phone, plan: action.planName, since:"Jul 3, 2026", status:"active", paymentStatus:"due", dueDate, lastPaid: null};
+        return {...g, members:[member, ...g.members.filter(m=>m.userId!==state.user.id)]};
+      });
+      return {...state, gyms};
+    }
+    case "GET_DAY_PASS": {
+      const gyms = state.gyms.map(g=>{
+        if(g.id !== action.gymId) return g;
+        return {...g, dayPasses:[{userId:state.user.id, name:state.user.name, phone:state.user.phone, date:"Jul 3, 2026"}, ...g.dayPasses]};
+      });
+      return {...state, gyms};
+    }
+    case "RESERVE_CLASS": {
+      const gyms = state.gyms.map(g=>{
+        if(g.id !== action.gymId) return g;
+        const classes = g.classes.map(c=>{
+          if(c.id !== action.classId) return c;
+          if(c.attendees.some(a=>a.userId===state.user.id)) return c;
+          return {...c, attendees:[...c.attendees, {userId:state.user.id, name:state.user.name}]};
+        });
+        return {...g, classes};
+      });
+      return {...state, gyms};
+    }
+    case "UPDATE_GYM": {
+      const gyms = state.gyms.map(g => g.id===action.gymId ? {...g, ...action.patch} : g);
+      return {...state, gyms};
+    }
+    case "ADD_PLAN": {
+      const gyms = state.gyms.map(g => g.id!==action.gymId ? g : {...g, plans:[...g.plans, {id:genId("plan"), name:action.plan.name, price:Number(action.plan.price), period:action.plan.period}]});
+      return {...state, gyms};
+    }
+    case "REMOVE_PLAN": {
+      const gyms = state.gyms.map(g => g.id!==action.gymId ? g : {...g, plans:g.plans.filter(p=>p.id!==action.planId)});
+      return {...state, gyms};
+    }
+    case "ADD_CLASS": {
+      const gyms = state.gyms.map(g => g.id!==action.gymId ? g : {...g, classes:[...g.classes, {id:genId("class"), attendees:[], ...action.cls, capacity:Number(action.cls.capacity), price:Number(action.cls.price)}]});
+      return {...state, gyms};
+    }
+    case "REMOVE_CLASS": {
+      const gyms = state.gyms.map(g => g.id!==action.gymId ? g : {...g, classes:g.classes.filter(c=>c.id!==action.classId)});
+      return {...state, gyms};
+    }
+    case "ADD_UPDATE": {
+      const gyms = state.gyms.map(g => g.id!==action.gymId ? g : {...g, updates:[{id:genId("upd"), date:"Jul 3, 2026", text:action.text}, ...g.updates]});
+      return {...state, gyms};
+    }
+    case "REMOVE_UPDATE": {
+      const gyms = state.gyms.map(g => g.id!==action.gymId ? g : {...g, updates:g.updates.filter(u=>u.id!==action.updateId)});
+      return {...state, gyms};
+    }
+    case "ADD_POST": {
+      const gyms = state.gyms.map(g => g.id!==action.gymId ? g : {...g, posts:[{id:genId("post"), image:action.image, caption:action.caption, date:"Jul 3, 2026"}, ...(g.posts||[])]});
+      return {...state, gyms};
+    }
+    case "REMOVE_POST": {
+      const gyms = state.gyms.map(g => g.id!==action.gymId ? g : {...g, posts:(g.posts||[]).filter(p=>p.id!==action.postId)});
+      return {...state, gyms};
+    }
+    case "VERIFY_ENTRY": {
+      // just a toast trigger, no state change needed besides log
+      return state;
+    }
+    case "LOG_CHECKIN": {
+      const entry = {id: genId("chk"), userId: action.userId, name: action.name, gymId: action.gymId, gymName: action.gymName, date: TODAY, time: action.time || "Just now"};
+      return {...state, checkins: [entry, ...state.checkins]};
+    }
+    case "MARK_PAYMENT_PAID": {
+      const gym0 = state.gyms.find(g=>g.id===action.gymId);
+      const member0 = gym0 && gym0.members.find(m=>m.userId===action.userId);
+      const plan0 = gym0 && gym0.plans.find(p=>p.name === (member0||{}).plan);
+      const gyms = state.gyms.map(g=>{
+        if(g.id !== action.gymId) return g;
+        const plan = g.plans.find(p=>p.name === (g.members.find(m=>m.userId===action.userId)||{}).plan);
+        const members = g.members.map(m=>{
+          if(m.userId !== action.userId) return m;
+          const newDue = fmtDate(addDays(TODAY, periodToDays(plan ? plan.period : "month")));
+          return {...m, paymentStatus:"paid", lastPaid: fmtDate(TODAY), dueDate: newDue};
+        });
+        return {...g, members};
+      });
+      const paymentRecord = member0 ? [{
+        id: genId("pay"), userId: action.userId, name: member0.name, gymId: action.gymId,
+        plan: member0.plan, amount: plan0 ? plan0.price : 0, date: TODAY,
+      }] : [];
+      return {...state, gyms, payments: [...paymentRecord, ...state.payments]};
+    }
+    case "TOGGLE_FREEZE": {
+      const gyms = state.gyms.map(g=>{
+        if(g.id !== action.gymId) return g;
+        const members = g.members.map(m => m.userId!==action.userId ? m : {...m, status: m.status==="frozen" ? "active" : "frozen"});
+        return {...g, members};
+      });
+      return {...state, gyms};
+    }
+    case "ADD_REVIEW": {
+      const gyms = state.gyms.map(g=>{
+        if(g.id !== action.gymId) return g;
+        const review = {id: genId("rev"), userId: state.user.id, name: state.user.name, rating: action.rating, text: action.text, date: fmtDate(TODAY)};
+        const newCount = g.reviews + 1;
+        const newRating = Math.round((((g.rating*g.reviews) + action.rating) / newCount) * 10) / 10;
+        return {...g, reviewsList:[review, ...(g.reviewsList||[])], reviews:newCount, rating:newRating};
+      });
+      return {...state, gyms};
+    }
+    case "TOGGLE_WORKOUT_DAY": {
+      const day = action.date;
+      const completedDays = {...(state.user.completedDays||{})};
+      if(completedDays[day]) delete completedDays[day];
+      else completedDays[day] = true;
+      return {...state, user: {...state.user, completedDays}};
+    }
+    case "MARK_WORKOUT_DAY_DONE": {
+      const completedDays = {...(state.user.completedDays||{}), [action.date]: true};
+      return {...state, user: {...state.user, completedDays}};
+    }
+    case "SET_SMS_OPTIN": {
+      return {...state, user: {...state.user, smsOptIn: action.value}};
+    }
+    default: return state;
+  }
+}
+
+const Ctx = createContext(null);
+function useApp(){ return useContext(Ctx); }
+
+/* ======================= SHARED UI ======================= */
+function Toast(){
+  const {state} = useApp();
+  if(!state.toast) return null;
+  return <div className="toast"><Icon name="checkCircle" size={17}/>{state.toast}</div>;
+}
+
+function Modal({onClose, children}){
+  return (
+    <div className="modal-overlay" onClick={e=>{ if(e.target===e.currentTarget) onClose(); }}>
+      <div className="modal">{children}</div>
+    </div>
+  );
+}
+function FlyoutPanel({onClose, title, children}){
+  return (
+    <React.Fragment>
+      <div className="flyout-scrim" onClick={onClose}></div>
+      <div className="flyout-panel">
+        <div className="flyout-header">
+          <button className="icon-btn flyout-back" onClick={onClose}><Icon name="back" size={18}/></button>
+          <h3 className="flyout-title">{title}</h3>
+          <button className="icon-btn flyout-close" onClick={onClose}><Icon name="close" size={17}/></button>
+        </div>
+        <div className="flyout-body">{children}</div>
+      </div>
+    </React.Fragment>
+  );
+}
+function ModalHeader({title, onClose}){
+  return (
+    <div className="row between" style={{marginBottom:18}}>
+      <h3 style={{margin:0,fontSize:19,fontWeight:800}}>{title}</h3>
+      <button className="icon-btn" onClick={onClose}><Icon name="close" size={18}/></button>
+    </div>
+  );
+}
+
+function Stars({rating}){
+  return (
+    <span className="row gap8" style={{color:"var(--warn)"}}>
+      <Icon name="star" size={14} color="#D97706"/>
+      <span className="tiny bold" style={{color:"var(--text)"}}>{rating}</span>
+    </span>
+  );
+}
+
+function QR({text, size=160}){
+  const ref = useRef(null);
+  useEffect(()=>{
+    if(ref.current){
+      ref.current.innerHTML = "";
+      try{
+        new QRCode(ref.current, {text, width:size, height:size, colorDark:"#1C1830", colorLight:"#ffffff"});
+      }catch(e){}
+    }
+  },[text,size]);
+  return <div className="qr-box"><div ref={ref}></div></div>;
+}
+
+function EmptyState({icon, title, sub, action}){
+  return (
+    <div className="empty">
+      <div className="icon-wrap"><Icon name={icon} size={28}/></div>
+      <div className="bold" style={{color:"var(--text)", marginBottom:6, fontSize:15}}>{title}</div>
+      <div className="small">{sub}</div>
+      {action && <div style={{marginTop:16}}>{action}</div>}
+    </div>
+  );
+}
+
+/* ======================= MARKETING LANDING PAGE ======================= */
+function MarketingPage(){
+  const {state, dispatch} = useApp();
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showAccountPicker, setShowAccountPicker] = useState(false);
+  const dark = state.theme === "dark";
+  const go = (screen) => dispatch({type:"SET_SCREEN", screen});
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  };
+
+  const FEATURES = [
+    {icon:"dumbbell", color:"var(--purple)", bg:"var(--purple-light)", title:"Home Workouts", text:"No-equipment routines for full body, core, cardio, HIIT, yoga and strength — anytime, anywhere."},
+    {icon:"mapPin", color:"var(--blue)", bg:"var(--blue-light)", title:"Local Gyms", text:"Discover registered gyms in Bole, Kazanchis, CMC, Hawassa and more — with real pricing, upfront."},
+    {icon:"calendar", color:"var(--purple)", bg:"var(--purple-light)", title:"Group Classes", text:"Book HIIT, spin, boxing, yoga and Zumba sessions at partner gyms in a couple of taps."},
+    {icon:"qrcode", color:"var(--blue)", bg:"var(--blue-light)", title:"Digital Gym ID", text:"One QR code for every gym you join. Staff scan it at the door — no cards, no paperwork."},
+  ];
+
+  return (
+    <div className="mkt">
+      <nav className="mkt-nav">
+        <div className="mkt-container mkt-nav-inner">
+          <div className="logo"><div className="mark"><Icon name="dumbbell" size={18} color="#fff"/></div><span className="grad-text">GymBuddy</span></div>
+          <div className="mkt-links">
+            <a onClick={()=>scrollTo("features")}>Features</a>
+            <a onClick={()=>scrollTo("for-gyms")}>For Gyms</a>
+            <a onClick={()=>scrollTo("how-it-works")}>How it works</a>
+          </div>
+          <div className="mkt-nav-cta">
+            <ThemeToggle/>
+            <button className="btn btn-primary btn-sm" onClick={()=>setShowAccountPicker(true)}>Join free</button>
+          </div>
+          <button className="icon-btn mkt-nav-mobile-toggle" onClick={()=>setShowMobileMenu(true)}><Icon name="menu" size={20}/></button>
+        </div>
+      </nav>
+
+      {showMobileMenu && (
+        <FlyoutPanel onClose={()=>setShowMobileMenu(false)} title="Menu">
+          <button className="mkt-mobile-link" onClick={()=>{setShowMobileMenu(false); scrollTo("features");}}>Features</button>
+          <button className="mkt-mobile-link" onClick={()=>{setShowMobileMenu(false); scrollTo("for-gyms");}}>For Gyms</button>
+          <button className="mkt-mobile-link" onClick={()=>{setShowMobileMenu(false); scrollTo("how-it-works");}} style={{borderBottom:"none", marginBottom:16}}>How it works</button>
+
+          <div className="card row between" style={{marginBottom:16}}>
+            <div className="row gap12">
+              <div style={{width:38,height:38,borderRadius:11,background:"var(--purple-light)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                <Icon name={dark?"sun":"moon"} size={17} color="var(--purple)"/>
+              </div>
+              <div>
+                <div className="bold small">Appearance</div>
+                <div className="tiny muted">{dark ? "Dark mode" : "Light mode"}</div>
+              </div>
+            </div>
+            <ThemeToggle/>
+          </div>
+
+          <button className="btn btn-primary btn-block btn-lg" onClick={()=>{setShowMobileMenu(false); setShowAccountPicker(true);}}>Join free</button>
+        </FlyoutPanel>
+      )}
+
+      {showAccountPicker && (
+        <Modal onClose={()=>setShowAccountPicker(false)}>
+          <ModalHeader title="Get started" onClose={()=>setShowAccountPicker(false)}/>
+          <p className="small muted" style={{marginBottom:20}}>Choose the kind of account you want to create.</p>
+          <div className="mkt-account-option" onClick={()=>go("onboardCustomer")}>
+            <div style={{width:44,height:44,borderRadius:13,background:"var(--purple-light)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+              <Icon name="user" size={20} color="var(--purple)"/>
+            </div>
+            <div>
+              <div className="bold small">Personal account</div>
+              <div className="tiny muted">Train at home &amp; join local gyms</div>
+            </div>
+          </div>
+          <div className="mkt-account-option" style={{marginBottom:0}} onClick={()=>go("onboardOwner")}>
+            <div style={{width:44,height:44,borderRadius:13,background:"var(--blue-light)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+              <Icon name="building" size={20} color="var(--blue)"/>
+            </div>
+            <div>
+              <div className="bold small">Gym account</div>
+              <div className="tiny muted">List your gym &amp; manage members</div>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      <header className="mkt-hero">
+        <div className="mkt-container mkt-hero-grid">
+          <div className="mkt-hero-copy">
+            <span className="mkt-eyebrow"><Icon name="location" size={13}/> Made for Ethiopia</span>
+            <h1 className="mkt-h1">Train at home.<br/>Join a gym nearby.</h1>
+            <p className="mkt-sub">GymBuddy brings free home workouts and Ethiopia's local gyms into one app — browse gyms near you, grab a free first-time day pass, book classes, and carry one digital ID everywhere you train.</p>
+            <div className="mkt-cta-row">
+              <button className="btn btn-primary btn-lg" onClick={()=>go("onboardCustomer")}>
+                <Icon name="user" size={18}/> Start training free
+              </button>
+              <button className="btn btn-secondary btn-lg" onClick={()=>go("onboardOwner")}>
+                <Icon name="building" size={18}/> List your gym
+              </button>
+            </div>
+            <div className="mkt-trust">
+              <div className="avstack">
+                <div className="avatar">NG</div>
+                <div className="avatar">BK</div>
+                <div className="avatar">HT</div>
+              </div>
+              <span>Joining gyms across Addis Ababa &amp; Hawassa</span>
+            </div>
+          </div>
+          <div className="mkt-hero-visual">
+            <img className="mkt-hero-img-main" src={IMG.gym4}/>
+            <div className="mkt-float-card mkt-float-1">
+              <div style={{width:38,height:38,borderRadius:11,background:"var(--success-light)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                <Icon name="checkCircle" size={18} color="var(--success)"/>
+              </div>
+              <div>
+                <div className="tiny bold">Day pass activated</div>
+                <div className="tiny muted">Iron Addis Gym</div>
+              </div>
+            </div>
+            <div className="mkt-float-card mkt-float-2">
+              <div style={{width:38,height:38,borderRadius:11,background:"var(--purple-light)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                <Icon name="flame" size={18} color="var(--purple)"/>
+              </div>
+              <div>
+                <div className="tiny bold">180 kcal burned</div>
+                <div className="tiny muted">Full Body Burn</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section className="mkt-stats">
+        <div className="mkt-container mkt-stats-grid">
+          <div><div className="mkt-stat-num grad-text">6+</div><div className="mkt-stat-label">Partner gyms</div></div>
+          <div><div className="mkt-stat-num grad-text">6</div><div className="mkt-stat-label">Home workout programs</div></div>
+          <div><div className="mkt-stat-num grad-text">5</div><div className="mkt-stat-label">Cities &amp; areas</div></div>
+          <div><div className="mkt-stat-num grad-text">100%</div><div className="mkt-stat-label">Free to join</div></div>
+        </div>
+      </section>
+
+      <section className="mkt-section" id="features">
+        <div className="mkt-container">
+          <div className="mkt-section-head">
+            <h2 className="mkt-h2">Everything you need to move</h2>
+            <p className="mkt-section-sub">Whether you train at home or at a gym down the street, GymBuddy keeps it simple.</p>
+          </div>
+          <div className="mkt-feature-grid">
+            {FEATURES.map(f=>(
+              <div key={f.title} className="mkt-feature-card">
+                <div className="mkt-feature-icon" style={{background:f.bg}}><Icon name={f.icon} size={22} color={f.color}/></div>
+                <h4>{f.title}</h4>
+                <p>{f.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="mkt-section" style={{paddingTop:0}}>
+        <div className="mkt-container">
+          <div className="mkt-split">
+            <div className="mkt-split-copy">
+              <span className="mkt-eyebrow"><Icon name="gift" size={13}/> First visit's on us</span>
+              <h2 className="mkt-h2" style={{fontSize:26}}>Not sure which gym to join? Try before you commit.</h2>
+              <p className="mkt-section-sub" style={{textAlign:"left"}}>Every gym on GymBuddy offers first-time visitors a free day pass. Walk in, train, feel the vibe — then join the plan that fits when you're ready.</p>
+              <ul className="mkt-check-list">
+                <li><span className="tick"><Icon name="check" size={13}/></span> Free first-time day pass at any registered gym</li>
+                <li><span className="tick"><Icon name="check" size={13}/></span> Compare pricing across gyms in your area upfront</li>
+                <li><span className="tick"><Icon name="check" size={13}/></span> Join a monthly, quarterly or annual plan when ready</li>
+              </ul>
+              <button className="btn btn-primary" onClick={()=>go("onboardCustomer")}>Find a gym near you <Icon name="chevronRight" size={16}/></button>
+            </div>
+            <div className="mkt-split-visual">
+              <img className="mkt-split-img" src={IMG.gym1}/>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mkt-section" id="for-gyms" style={{background:"var(--card)", borderTop:"1px solid var(--border)", borderBottom:"1px solid var(--border)"}}>
+        <div className="mkt-container">
+          <div className="mkt-split reverse">
+            <div className="mkt-split-copy">
+              <span className="mkt-eyebrow" style={{background:"var(--blue-light)", color:"var(--blue)"}}><Icon name="building" size={13}/> For gym owners</span>
+              <h2 className="mkt-h2" style={{fontSize:26}}>Run your gym's membership, digitally.</h2>
+              <p className="mkt-section-sub" style={{textAlign:"left"}}>List your gym, set your own pricing, post classes and updates, and verify every member at the door with a quick QR scan — all from one dashboard.</p>
+              <ul className="mkt-check-list">
+                <li><span className="tick"><Icon name="check" size={13}/></span> You control membership &amp; day-pass pricing, always</li>
+                <li><span className="tick"><Icon name="check" size={13}/></span> Post classes, schedules and announcements in seconds</li>
+                <li><span className="tick"><Icon name="check" size={13}/></span> Scan member QR codes to verify entry at the front desk</li>
+              </ul>
+              <button className="btn btn-primary" onClick={()=>go("onboardOwner")}>List your gym free <Icon name="chevronRight" size={16}/></button>
+            </div>
+            <div className="mkt-split-visual">
+              <div className="mkt-dash-preview">
+                <div className="row between" style={{marginBottom:16}}>
+                  <div className="row gap10"><img src={IMG.gym1} style={{width:34,height:34,borderRadius:9,objectFit:"cover"}}/><span className="bold small">Iron Addis Gym</span></div>
+                  <span className="badge badge-success">Live</span>
+                </div>
+                <div className="grid-2">
+                  <div className="card center"><div className="grad-text bold" style={{fontSize:20}}>214</div><div className="tiny muted bold">Members</div></div>
+                  <div className="card center"><div className="grad-text bold" style={{fontSize:20}}>38</div><div className="tiny muted bold">Day passes</div></div>
+                  <div className="card center"><div className="grad-text bold" style={{fontSize:20}}>56</div><div className="tiny muted bold">Class bookings</div></div>
+                  <div className="card center"><div className="grad-text bold" style={{fontSize:20}}>128K</div><div className="tiny muted bold">Revenue (ETB)</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mkt-section" id="how-it-works">
+        <div className="mkt-container">
+          <div className="mkt-section-head">
+            <h2 className="mkt-h2">How GymBuddy works</h2>
+            <p className="mkt-section-sub">Three steps from sign-up to your first workout — home or at a gym.</p>
+          </div>
+          <div className="mkt-steps">
+            <div className="mkt-step">
+              <div className="mkt-step-num">1</div>
+              <h4>Create your free account</h4>
+              <p>Add your name and area — no payment needed to get started.</p>
+            </div>
+            <div className="mkt-step">
+              <div className="mkt-step-num">2</div>
+              <h4>Train at home or try a gym</h4>
+              <p>Start a home workout instantly, or claim a free day pass at a local gym.</p>
+            </div>
+            <div className="mkt-step">
+              <div className="mkt-step-num">3</div>
+              <h4>Join &amp; get your digital ID</h4>
+              <p>Pick a membership plan and get one QR gym ID staff scan at the door.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mkt-section" style={{paddingTop:0}}>
+        <div className="mkt-container">
+          <div className="mkt-cta-band">
+            <h2>Ready to move, Ethiopia?</h2>
+            <p>Join home workouts and local gyms on one app — free to start, no commitment required.</p>
+            <div className="row gap12" style={{justifyContent:"center", flexWrap:"wrap"}}>
+              <button className="btn btn-primary btn-lg" onClick={()=>go("onboardCustomer")}>Get started free</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer className="mkt-footer">
+        <div className="mkt-container">
+          <div className="mkt-footer-top">
+            <div>
+              <div className="logo" style={{marginBottom:10}}><div className="mark"><Icon name="dumbbell" size={16} color="#fff"/></div><span className="grad-text" style={{fontSize:17}}>GymBuddy</span></div>
+              <p className="small muted" style={{maxWidth:280,margin:0}}>Ethiopia's home for home workouts and local gym membership.</p>
+            </div>
+            <div className="mkt-footer-links">
+              <a onClick={()=>scrollTo("features")}>Features</a>
+              <a onClick={()=>scrollTo("for-gyms")}>For Gyms</a>
+              <a onClick={()=>scrollTo("how-it-works")}>How it works</a>
+              <a onClick={()=>go("onboardCustomer")}>Get started</a>
+            </div>
+          </div>
+          <div className="divider"></div>
+          <div className="mkt-footer-bottom">
+            <span>© 2026 GymBuddy. Built for Ethiopia.</span>
+            <span>Demo product — data resets each session.</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+/* ======================= ONBOARDING: CUSTOMER ======================= */
+/* ======================= SMS VERIFICATION (simulated) ======================= */
+function PhoneVerifyStep({phone, onVerified, onBack}){
+  const {dispatch} = useApp();
+  const [otp, setOtp] = useState(()=>genOtp());
+  const [entered, setEntered] = useState("");
+  const [error, setError] = useState("");
+  const [sentAgain, setSentAgain] = useState(false);
+
+  const check = ()=>{
+    if(entered.trim() === otp){
+      onVerified();
+    } else {
+      setError("That code doesn't match. Try again.");
+    }
+  };
+
+  return (
+    <div className="page" style={{maxWidth:480,margin:"0 auto"}}>
+      <button className="icon-btn" style={{marginBottom:18}} onClick={onBack}><Icon name="back"/></button>
+      <div style={{width:56,height:56,borderRadius:16,background:"var(--purple-light)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:18}}>
+        <Icon name="phone" size={24} color="var(--purple)"/>
+      </div>
+      <h2 style={{fontSize:24,fontWeight:900,marginBottom:6}}>Verify your phone</h2>
+      <p className="muted small" style={{marginBottom:20}}>We sent a 6-digit code by SMS to <b style={{color:"var(--text)"}}>{phone}</b>.</p>
+
+      <div className="card" style={{background:"var(--purple-light)", border:"none", marginBottom:20}}>
+        <div className="row gap10">
+          <Icon name="shield" size={16} color="var(--purple)"/>
+          <span className="tiny bold" style={{color:"var(--purple)"}}>Demo mode</span>
+        </div>
+        <p className="tiny muted" style={{margin:"6px 0 0"}}>GymBuddy can't send real SMS from this prototype, so here's the code it "sent": <b style={{color:"var(--text)", letterSpacing:2}}>{otp}</b></p>
+      </div>
+
+      <div className="field">
+        <label>Enter verification code</label>
+        <input
+          className="input" placeholder="6-digit code" inputMode="numeric" maxLength={6}
+          value={entered}
+          onChange={e=>{ setEntered(e.target.value.replace(/\D/g,"")); setError(""); }}
+          style={{letterSpacing:6, fontWeight:700, textAlign:"center"}}
+        />
+        {error && <div className="tiny" style={{color:"var(--danger)", marginTop:8}}>{error}</div>}
+      </div>
+
+      <button className="btn btn-primary btn-block btn-lg" style={{marginTop:6}} disabled={entered.length<6} onClick={check}>
+        Verify &amp; continue <Icon name="chevronRight" size={18}/>
+      </button>
+      <button
+        className="btn btn-ghost btn-block"
+        style={{marginTop:8}}
+        onClick={()=>{
+          setOtp(genOtp());
+          setEntered("");
+          setSentAgain(true);
+          dispatch({type:"SET_TOAST", msg:"New code sent"});
+          setTimeout(()=>dispatch({type:"CLEAR_TOAST"}),2000);
+        }}
+      >
+        {sentAgain ? "Code resent ✓ — resend again" : "Resend code"}
+      </button>
+    </div>
+  );
+}
+
+function OnboardCustomer(){
+  const {dispatch} = useApp();
+  const [step, setStep] = useState("form"); // form | verify
+  const [name,setName]=useState("");
+  const [phone,setPhone]=useState("");
+  const [area,setArea]=useState("Bole");
+  const [smsOptIn,setSmsOptIn]=useState(true);
+
+  if(step==="verify"){
+    return (
+      <PhoneVerifyStep
+        phone={phone.trim()}
+        onBack={()=>setStep("form")}
+        onVerified={()=>dispatch({type:"CREATE_CUSTOMER", name:name.trim(), phone:phone.trim(), area, smsOptIn})}
+      />
+    );
+  }
+
+  return (
+    <div className="page" style={{maxWidth:480,margin:"0 auto"}}>
+      <button className="icon-btn" style={{marginBottom:18}} onClick={()=>dispatch({type:"SET_SCREEN",screen:"marketing"})}><Icon name="back"/></button>
+      <h2 style={{fontSize:24,fontWeight:900,marginBottom:6}}>Create your account</h2>
+      <p className="muted small" style={{marginBottom:26}}>Just the basics — you can add more later.</p>
+
+      <div className="field">
+        <label>Full name</label>
+        <input className="input" placeholder="e.g. Selamawit Bekele" value={name} onChange={e=>setName(e.target.value)}/>
+      </div>
+      <div className="field">
+        <label>Phone number</label>
+        <input className="input" placeholder="09xx xxx xxx" value={phone} onChange={e=>setPhone(e.target.value)}/>
+      </div>
+      <div className="field">
+        <label>Your area</label>
+        <select className="input" value={area} onChange={e=>setArea(e.target.value)}>
+          {AREAS.filter(a=>a!=="All Areas").map(a=><option key={a} value={a}>{a}</option>)}
+        </select>
+      </div>
+
+      <div className="card row between" style={{marginBottom:22}}>
+        <div className="row gap12">
+          <div style={{width:38,height:38,borderRadius:11,background:"var(--purple-light)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <Icon name="bell" size={17} color="var(--purple)"/>
+          </div>
+          <div>
+            <div className="bold small">SMS notifications</div>
+            <div className="tiny muted">Payment &amp; class reminders by text</div>
+          </div>
+        </div>
+        <Switch on={smsOptIn} onChange={setSmsOptIn}/>
+      </div>
+
+      <button
+        className="btn btn-primary btn-block btn-lg"
+        style={{marginTop:10}}
+        disabled={!name.trim() || !phone.trim()}
+        onClick={()=>setStep("verify")}
+      >
+        Continue <Icon name="chevronRight" size={18}/>
+      </button>
+      <p className="tiny muted center" style={{marginTop:16}}>By continuing you agree this is a demo experience of GymBuddy.</p>
+    </div>
+  );
+}
+
+/* ======================= ONBOARDING: OWNER ======================= */
+function OnboardOwner(){
+  const {state, dispatch} = useApp();
+  const [mode,setMode] = useState("choose"); // choose | create | verify
+  const [name,setName]=useState("");
+  const [area,setArea]=useState("Bole");
+  const [description,setDescription]=useState("");
+  const [dayPassPrice,setDayPassPrice]=useState("100");
+  const [ownerPhone,setOwnerPhone]=useState("");
+  const images = [IMG.gym1,IMG.gym2,IMG.gym3,IMG.gym4,IMG.gym5,IMG.gym6];
+  const [image,setImage]=useState(images[0]);
+
+  const createGym = ()=>dispatch({type:"CREATE_OWNER_GYM", name:name.trim(), area, city: area==="Hawassa"?"Hawassa":"Addis Ababa", description: description.trim()||"A great place to train.", dayPassPrice, image, amenities:["Free Weights","Cardio Zone"]});
+
+  if(mode==="choose"){
+    return (
+      <div className="page" style={{maxWidth:480,margin:"0 auto"}}>
+        <button className="icon-btn" style={{marginBottom:18}} onClick={()=>dispatch({type:"SET_SCREEN",screen:"marketing"})}><Icon name="back"/></button>
+        <h2 style={{fontSize:24,fontWeight:900,marginBottom:6}}>Manage your gym</h2>
+        <p className="muted small" style={{marginBottom:26}}>Register a new gym, or explore with a pre-filled demo gym.</p>
+
+        <button className="btn btn-primary btn-block btn-lg" style={{marginBottom:12}} onClick={()=>setMode("create")}>
+          <Icon name="plus" size={18}/> Register your gym
+        </button>
+
+        <div className="divider"></div>
+        <div className="tiny muted bold" style={{marginBottom:10, letterSpacing:.4, textTransform:"uppercase"}}>Or explore a demo gym</div>
+        {state.gyms.slice(0,3).map(g=>(
+          <div key={g.id} className="card row between" style={{marginBottom:10, padding:14}}>
+            <div className="row gap12">
+              <img src={g.image} style={{width:44,height:44,borderRadius:11,objectFit:"cover"}}/>
+              <div>
+                <div className="bold small">{g.name}</div>
+                <div className="tiny muted">{g.area}, {g.city}</div>
+              </div>
+            </div>
+            <button className="btn btn-secondary btn-sm" onClick={()=>dispatch({type:"MANAGE_EXISTING_GYM", gymId:g.id})}>Manage</button>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if(mode==="verify"){
+    return (
+      <PhoneVerifyStep
+        phone={ownerPhone.trim()}
+        onBack={()=>setMode("create")}
+        onVerified={createGym}
+      />
+    );
+  }
+
+  return (
+    <div className="page" style={{maxWidth:480,margin:"0 auto"}}>
+      <button className="icon-btn" style={{marginBottom:18}} onClick={()=>setMode("choose")}><Icon name="back"/></button>
+      <h2 style={{fontSize:24,fontWeight:900,marginBottom:6}}>Register your gym</h2>
+      <p className="muted small" style={{marginBottom:26}}>This creates your gym's public profile on GymBuddy.</p>
+
+      <div className="field">
+        <label>Gym name</label>
+        <input className="input" placeholder="e.g. Beza Fitness Center" value={name} onChange={e=>setName(e.target.value)}/>
+      </div>
+      <div className="field">
+        <label>Owner phone number</label>
+        <input className="input" placeholder="09xx xxx xxx" value={ownerPhone} onChange={e=>setOwnerPhone(e.target.value)}/>
+      </div>
+      <div className="field">
+        <label>Area</label>
+        <select className="input" value={area} onChange={e=>setArea(e.target.value)}>
+          {AREAS.filter(a=>a!=="All Areas").map(a=><option key={a} value={a}>{a}</option>)}
+        </select>
+      </div>
+      <div className="field">
+        <label>Description</label>
+        <textarea className="input" placeholder="Tell customers what makes your gym great..." value={description} onChange={e=>setDescription(e.target.value)}/>
+      </div>
+      <div className="field">
+        <label>Day pass price (ETB)</label>
+        <input className="input" type="number" placeholder="100" value={dayPassPrice} onChange={e=>setDayPassPrice(e.target.value)}/>
+      </div>
+      <div className="field">
+        <label>Cover photo</label>
+        <div className="row gap10" style={{overflowX:"auto", marginBottom:12}}>
+          {images.map(im=>(
+            <img key={im} src={im} onClick={()=>setImage(im)}
+              style={{width:64,height:64,borderRadius:12,objectFit:"cover",cursor:"pointer",
+                border: image===im ? "3px solid var(--purple)" : "3px solid transparent", flexShrink:0}}/>
+          ))}
+          {!images.includes(image) && (
+            <img src={image} style={{width:64,height:64,borderRadius:12,objectFit:"cover",border:"3px solid var(--purple)",flexShrink:0}}/>
+          )}
+        </div>
+        <PhotoUploadButton label="Upload your own photo" onUploaded={setImage} className="btn btn-secondary btn-sm" icon="upload"/>
+      </div>
+
+      <button
+        className="btn btn-primary btn-block btn-lg"
+        style={{marginTop:10}}
+        disabled={!name.trim() || !ownerPhone.trim()}
+        onClick={()=>setMode("verify")}
+      >
+        Continue <Icon name="chevronRight" size={18}/>
+      </button>
+    </div>
+  );
+}
+
+/* ======================= HEADER ======================= */
+function Switch({on, onChange}){
+  return (
+    <button
+      type="button"
+      className={"switch "+(on?"on":"")}
+      role="switch"
+      aria-checked={on}
+      onClick={()=>onChange(!on)}
+    >
+      <span className="switch-knob"></span>
+    </button>
+  );
+}
+
+function ThemeToggle({compact}){
+  const {state, dispatch} = useApp();
+  const dark = state.theme === "dark";
+  return (
+    <button
+      className="icon-btn"
+      title={dark ? "Switch to light mode" : "Switch to dark mode"}
+      onClick={()=>dispatch({type:"TOGGLE_THEME"})}
+    >
+      <Icon name={dark ? "sun" : "moon"} size={18}/>
+    </button>
+  );
+}
+
+function classDayMatches(dayStr, abbrev){
+  if(!dayStr) return false;
+  if(dayStr.toLowerCase()==="daily") return true;
+  return dayStr.split("/").map(s=>s.trim()).includes(abbrev);
+}
+function parseTimeToMinutes(t){
+  const m = (t||"").match(/(\d+):(\d+)\s*(AM|PM)/i);
+  if(!m) return 0;
+  let h = parseInt(m[1],10); const min = parseInt(m[2],10); const ap = m[3].toUpperCase();
+  if(ap==="PM" && h!==12) h+=12;
+  if(ap==="AM" && h===12) h=0;
+  return h*60+min;
+}
+
+function WeeklyCalendar({entries}){
+  const days = weekDates();
+  return (
+    <div className="cal-grid">
+      {days.map(d=>{
+        const abbrev = DAY_ABBR[d.getDay()];
+        const dayEntries = entries
+          .filter(e=>classDayMatches(e.cls.day, abbrev))
+          .sort((a,b)=>parseTimeToMinutes(a.cls.time)-parseTimeToMinutes(b.cls.time));
+        const isToday = isoDate(d)===isoDate(TODAY);
+        return (
+          <div key={abbrev} className={"cal-day "+(isToday?"today":"")}>
+            <div className="cal-day-head">
+              <span className="cal-day-name">{abbrev}</span>
+              <span className="cal-day-num">{d.getDate()}</span>
+            </div>
+            <div className="cal-day-body">
+              {dayEntries.length===0 ? <div className="cal-empty">—</div> :
+                dayEntries.map(e=>(
+                  <div key={e.gym.id+e.cls.id} className="cal-event">
+                    <div className="cal-event-time">{e.cls.time}</div>
+                    <div className="cal-event-title">{e.cls.title}</div>
+                    <div className="cal-event-sub">{e.gym.name}</div>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function getNotifications(state){
+  if(!state.user) return [];
+  const notifs = [];
+  state.gyms.forEach(g=>{
+    const m = g.members.find(x=>x.userId===state.user.id);
+    if(m && m.dueDate){
+      const due = new Date(m.dueDate);
+      if(!isNaN(due)){
+        const d = daysBetween(TODAY, due);
+        if(d<=7){
+          notifs.push({
+            id:"pay-"+g.id,
+            icon:"dollar",
+            title: d<0 ? `Payment overdue — ${g.name}` : d===0 ? `Payment due today — ${g.name}` : `Payment due in ${d} day${d===1?"":"s"} — ${g.name}`,
+            sub: `${m.plan} membership · due ${m.dueDate} · pay on arrival`,
+            urgent: d<=2,
+          });
+        }
+      }
+    }
+    (g.classes||[]).forEach(c=>{
+      if(c.attendees.some(a=>a.userId===state.user.id)){
+        notifs.push({
+          id:"cls-"+g.id+c.id,
+          icon:"calendar",
+          title:`Upcoming class: ${c.title}`,
+          sub:`${g.name} · ${c.day} · ${c.time}`,
+          urgent:false,
+        });
+      }
+    });
+  });
+  return notifs;
+}
+
+function NotificationsPanel({onClose}){
+  const {state} = useApp();
+  const notifs = getNotifications(state);
+  return (
+    <FlyoutPanel onClose={onClose} title="Notifications">
+      {state.user?.smsOptIn && (
+        <div className="row gap10" style={{marginBottom:16}}>
+          <Icon name="bell" size={14} color="var(--purple)"/>
+          <span className="tiny muted">SMS reminders are on for {state.user.phone}</span>
+        </div>
+      )}
+      {notifs.length===0 ? (
+        <EmptyState icon="bell" title="You're all caught up" sub="Payment due dates and class reminders will show up here."/>
+      ) : (
+        notifs.map(n=>(
+          <div key={n.id} className="list-item" style={{alignItems:"flex-start"}}>
+            <div style={{width:38,height:38,borderRadius:11,background: n.urgent?"var(--danger-light)":"var(--purple-light)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+              <Icon name={n.icon} size={17} color={n.urgent?"var(--danger)":"var(--purple)"}/>
+            </div>
+            <div style={{flex:1}}>
+              <div className="small bold">{n.title}</div>
+              <div className="tiny muted">{n.sub}</div>
+            </div>
+          </div>
+        ))
+      )}
+    </FlyoutPanel>
+  );
+}
+
+function SettingsModal({onClose}){
+  const {state, dispatch} = useApp();
+  const dark = state.theme === "dark";
+  const gym = state.role==="owner" ? state.gyms.find(g=>g.id===state.ownerGymId) : null;
+  return (
+    <FlyoutPanel onClose={onClose} title="Settings">
+
+      <div className="card row gap12" style={{marginBottom:18}}>
+        <div className="avatar">{(state.role==="owner" ? (gym?.name||"G") : (state.user?.name||"U")).split(" ").map(x=>x[0]).slice(0,2).join("")}</div>
+        <div style={{flex:1, minWidth:0}}>
+          <div className="bold small" style={{overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{state.role==="owner" ? (gym?.name || "Your gym") : state.user?.name}</div>
+          <div className="tiny muted" style={{overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{state.role==="owner" ? "Gym owner account" : state.user?.phone}</div>
+        </div>
+        <span className="badge badge-purple" style={{flexShrink:0}}>{state.role==="owner" ? "Owner" : "Member"}</span>
+      </div>
+
+      <div className="card row between" style={{marginBottom:12}}>
+        <div className="row gap12">
+          <div style={{width:38,height:38,borderRadius:11,background:"var(--purple-light)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <Icon name={dark?"sun":"moon"} size={17} color="var(--purple)"/>
+          </div>
+          <div>
+            <div className="bold small">Appearance</div>
+            <div className="tiny muted">{dark ? "Dark mode" : "Light mode"}</div>
+          </div>
+        </div>
+        <ThemeToggle/>
+      </div>
+
+      {state.role==="customer" && (
+        <div className="card row between" style={{marginBottom:20}}>
+          <div className="row gap12">
+            <div style={{width:38,height:38,borderRadius:11,background:"var(--purple-light)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+              <Icon name="bell" size={17} color="var(--purple)"/>
+            </div>
+            <div>
+              <div className="bold small">SMS notifications</div>
+              <div className="tiny muted">Payment &amp; class reminders by text</div>
+            </div>
+          </div>
+          <Switch on={!!state.user?.smsOptIn} onChange={(v)=>dispatch({type:"SET_SMS_OPTIN", value:v})}/>
+        </div>
+      )}
+
+      <button className="btn btn-secondary btn-block" style={{marginBottom:10}} onClick={()=>{ onClose(); dispatch({type:"SWITCH_ROLE"}); }}>
+        <Icon name="building" size={17}/> Switch role
+      </button>
+      <button className="btn btn-danger btn-block" onClick={()=>{ onClose(); dispatch({type:"LOGOUT"}); }}>
+        <Icon name="logout" size={17}/> Log out
+      </button>
+    </FlyoutPanel>
+  );
+}
+
+function Header({title, subtitle}){
+  const {state, dispatch} = useApp();
+  const [showSettings, setShowSettings] = useState(false);
+  const [showNotifs, setShowNotifs] = useState(false);
+  const notifCount = state.role==="customer" ? getNotifications(state).length : 0;
+  return (
+    <React.Fragment>
+      <div className="topbar">
+        <div className="topbar-inner">
+          <div className="logo" onClick={()=>{}}>
+            <div className="mark"><Icon name="dumbbell" size={18} color="#fff"/></div>
+            <span className="grad-text">GymBuddy</span>
+          </div>
+          <div className="row gap10">
+            {state.role==="customer" && (
+              <button className="icon-btn" title="Notifications" style={{position:"relative"}} onClick={()=>setShowNotifs(true)}>
+                <Icon name="bell" size={18}/>
+                {notifCount>0 && <span style={{position:"absolute",top:7,right:7,width:8,height:8,borderRadius:"50%",background:"var(--danger)"}}></span>}
+              </button>
+            )}
+            <button className="icon-btn" title="Settings" onClick={()=>setShowSettings(true)}><Icon name="settings" size={18}/></button>
+          </div>
+        </div>
+      </div>
+      {showSettings && <SettingsModal onClose={()=>setShowSettings(false)}/>}
+      {showNotifs && <NotificationsPanel onClose={()=>setShowNotifs(false)}/>}
+    </React.Fragment>
+  );
+}
+
+/* ======================= CUSTOMER APP ======================= */
+function CustomerApp(){
+  const [tab, setTab] = useState("home");
+  const [selectedWorkout, setSelectedWorkout] = useState(null);
+  const [selectedGym, setSelectedGym] = useState(null);
+
+  const navItems = [
+    {key:"home", icon:"home", label:"Home"},
+    {key:"workouts", icon:"dumbbell", label:"Workouts"},
+    {key:"gyms", icon:"building", label:"Gyms"},
+    {key:"classes", icon:"calendar", label:"Classes"},
+    {key:"id", icon:"qrcode", label:"My ID"},
+  ];
+
+  let content;
+  if(selectedWorkout) content = <WorkoutDetail workout={selectedWorkout} onBack={()=>setSelectedWorkout(null)}/>;
+  else if(selectedGym) content = <GymDetail gymId={selectedGym} onBack={()=>setSelectedGym(null)}/>;
+  else if(tab==="home") content = <CustomerHome goTab={setTab} openWorkout={setSelectedWorkout} openGym={setSelectedGym}/>;
+  else if(tab==="workouts") content = <WorkoutsTab openWorkout={setSelectedWorkout}/>;
+  else if(tab==="gyms") content = <GymsTab openGym={setSelectedGym}/>;
+  else if(tab==="classes") content = <ClassesTab openGym={setSelectedGym}/>;
+  else if(tab==="id") content = <MyIdTab/>;
+
+  return (
+    <React.Fragment>
+      <Header/>
+      <div className="app-body">
+        <nav className="bottomnav">
+          <div className="bottomnav-inner">
+            {navItems.map(n=>(
+              <button key={n.key} className={"navitem "+(tab===n.key && !selectedWorkout && !selectedGym ? "active":"")}
+                onClick={()=>{ setTab(n.key); setSelectedWorkout(null); setSelectedGym(null); }}>
+                <Icon name={n.icon} size={21}/>
+                <span>{n.label}</span>
+              </button>
+            ))}
+          </div>
+        </nav>
+        <div className="app-main">{content}</div>
+      </div>
+    </React.Fragment>
+  );
+}
+
+function CustomerHome({goTab, openWorkout, openGym}){
+  const {state} = useApp();
+  const myGyms = state.gyms.filter(g => g.members.some(m=>m.userId===state.user.id));
+  const featured = WORKOUTS[0];
+
+  return (
+    <div className="page">
+      <div className="section">
+        <h2 style={{fontSize:22,fontWeight:900,margin:"4px 0 2px"}}>Hi {state.user.name.split(" ")[0]} 👋</h2>
+        <p className="muted small" style={{margin:0}}>Ready to move today?</p>
+      </div>
+
+      {myGyms.length===0 && (
+        <div className="section">
+          <div className="card" style={{background:"linear-gradient(135deg,var(--grad-a),var(--grad-b))", border:"none", color:"#fff"}}>
+            <div className="row gap12" style={{marginBottom:12}}>
+              <div style={{width:42,height:42,borderRadius:12,background:"rgba(255,255,255,.2)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                <Icon name="gift" size={22} color="#fff"/>
+              </div>
+              <div>
+                <div className="bold" style={{fontSize:15}}>New here? Try a gym for free</div>
+                <div className="tiny" style={{opacity:.9}}>Get a first-time day pass at any local gym.</div>
+              </div>
+            </div>
+            <button className="btn btn-block" style={{background:"#fff", color:"var(--purple)"}} onClick={()=>goTab("gyms")}>
+              Browse gyms near {state.user.area} <Icon name="chevronRight" size={16}/>
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="section">
+        <div className="section-head"><h3>Featured workout</h3><button className="link" onClick={()=>goTab("workouts")}>See all</button></div>
+        <div className="card" style={{padding:0, overflow:"hidden", cursor:"pointer"}} onClick={()=>openWorkout(featured)}>
+          <div style={{position:"relative"}}>
+            <img src={featured.image} style={{width:"100%",height:160,objectFit:"cover"}}/>
+            <div style={{position:"absolute", top:12, left:12}}><span className="badge badge-purple" style={{background:"rgba(255,255,255,.92)"}}>{featured.category}</span></div>
+            <div style={{position:"absolute", bottom:12, right:12, width:44, height:44, borderRadius:"50%", background:"#fff", display:"flex", alignItems:"center", justifyContent:"center"}}>
+              <Icon name="play" size={18} color="var(--purple)"/>
+            </div>
+          </div>
+          <div style={{padding:16}}>
+            <div className="bold" style={{fontSize:16, marginBottom:6}}>{featured.title}</div>
+            <div className="row gap14 small muted">
+              <span className="row gap8"><Icon name="clock" size={15}/>{featured.duration} min</span>
+              <span className="row gap8"><Icon name="flame" size={15}/>{featured.calories} kcal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {myGyms.length>0 && (
+        <div className="section">
+          <div className="section-head"><h3>Your gyms</h3><button className="link" onClick={()=>goTab("id")}>My ID</button></div>
+          {myGyms.map(g=>(
+            <div key={g.id} className="card row between" style={{marginBottom:10, cursor:"pointer"}} onClick={()=>openGym(g.id)}>
+              <div className="row gap12">
+                <img src={g.image} style={{width:48,height:48,borderRadius:12,objectFit:"cover"}}/>
+                <div>
+                  <div className="bold small">{g.name}</div>
+                  <div className="tiny muted">{g.members.find(m=>m.userId===state.user.id)?.plan} member</div>
+                </div>
+              </div>
+              <Icon name="chevronRight" size={18} color="var(--muted-light)"/>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="section">
+        <div className="section-head"><h3>Gyms near you</h3><button className="link" onClick={()=>goTab("gyms")}>See all</button></div>
+        {state.gyms.filter(g=>g.area===state.user.area).slice(0,2).concat(state.gyms.filter(g=>g.area!==state.user.area)).slice(0,2).map(g=>(
+          <GymCard key={g.id} gym={g} onClick={()=>openGym(g.id)}/>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function BadgeModal({onClose, days}){
+  const {state} = useApp();
+  const [dataUrl, setDataUrl] = useState(null);
+
+  useEffect(()=>{
+    const label = `${MONTH_NAMES[days[0].getMonth()]} ${days[0].getDate()}–${MONTH_NAMES[days[6].getMonth()]} ${days[6].getDate()}, ${days[6].getFullYear()}`;
+    setDataUrl(generateBadgeDataUrl(state.user.name, label));
+  }, []);
+
+  const download = ()=>{
+    if(!dataUrl) return;
+    const a = document.createElement("a");
+    a.href = dataUrl;
+    a.download = "gymbuddy-week-badge.png";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
+  const share = async ()=>{
+    if(!dataUrl) return;
+    try{
+      const res = await fetch(dataUrl);
+      const blob = await res.blob();
+      const file = new File([blob], "gymbuddy-week-badge.png", {type:"image/png"});
+      if(navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){
+        await navigator.share({files:[file], title:"GymBuddy Week Complete", text:"I completed a full week of workouts on GymBuddy!"});
+        return;
+      }
+    }catch(e){}
+    download();
+  };
+
+  return (
+    <Modal onClose={onClose}>
+      <ModalHeader title="Week Complete Badge" onClose={onClose}/>
+      <div className="center" style={{marginBottom:20}}>
+        {dataUrl ? <img src={dataUrl} style={{width:"100%", maxWidth:280, borderRadius:20, boxShadow:"var(--shadow-md)"}}/> : <div className="small muted" style={{padding:"40px 0"}}>Generating badge...</div>}
+      </div>
+      <div className="row gap12">
+        <button className="btn btn-secondary btn-lg" style={{flex:1}} onClick={download}><Icon name="download" size={17}/> Save</button>
+        <button className="btn btn-primary btn-lg" style={{flex:1}} onClick={share}><Icon name="share" size={17}/> Share</button>
+      </div>
+    </Modal>
+  );
+}
+
+function WeeklyProgress(){
+  const {state, dispatch} = useApp();
+  const [showBadge, setShowBadge] = useState(false);
+  const days = weekDates();
+  const completed = state.user.completedDays || {};
+  const doneCount = days.filter(d=>completed[isoDate(d)]).length;
+  const allDone = doneCount === 7;
+
+  return (
+    <div className="card" style={{marginBottom:22}}>
+      <div className="row between" style={{marginBottom:16}}>
+        <div>
+          <div className="bold small">This week</div>
+          <div className="tiny muted">{doneCount}/7 days trained · tap a day to log it</div>
+        </div>
+        {allDone && (
+          <button className="btn btn-primary btn-sm" onClick={()=>setShowBadge(true)}>
+            <Icon name="trophy" size={14}/> View badge
+          </button>
+        )}
+      </div>
+      <div className="row" style={{justifyContent:"space-between"}}>
+        {days.map(d=>{
+          const iso = isoDate(d);
+          const isFuture = d > TODAY;
+          const done = !!completed[iso];
+          return (
+            <button
+              key={iso}
+              disabled={isFuture}
+              onClick={()=>dispatch({type:"TOGGLE_WORKOUT_DAY", date:iso})}
+              style={{
+                display:"flex", flexDirection:"column", alignItems:"center", gap:6,
+                background:"none", border:"none", cursor: isFuture?"default":"pointer", opacity:isFuture?0.35:1,
+                flex:1, padding:"4px 0",
+              }}
+            >
+              <span className="tiny muted bold">{DAY_ABBR[d.getDay()]}</span>
+              <span style={{
+                width:32,height:32,borderRadius:"50%",
+                display:"flex",alignItems:"center",justifyContent:"center",
+                background: done ? "linear-gradient(135deg,var(--grad-a),var(--grad-b))" : "var(--border)",
+                color: done ? "#fff" : "var(--muted-light)",
+              }}>
+                {done ? <Icon name="check" size={14}/> : <span className="tiny bold">{d.getDate()}</span>}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+      {allDone && (
+        <div className="row gap10" style={{marginTop:16, background:"var(--success-light)", padding:"10px 14px", borderRadius:12}}>
+          <Icon name="trophy" size={16} color="var(--success)"/>
+          <span className="tiny bold" style={{color:"var(--success)"}}>Full week complete! You earned a badge 🎉</span>
+        </div>
+      )}
+      {showBadge && <BadgeModal onClose={()=>setShowBadge(false)} days={days}/>}
+    </div>
+  );
+}
+
+function WorkoutsTab({openWorkout}){
+  const [cat,setCat] = useState("All");
+  const list = cat==="All" ? WORKOUTS : WORKOUTS.filter(w=>w.category===cat);
+  return (
+    <div className="page">
+      <h2 style={{fontSize:21,fontWeight:900,margin:"4px 0 16px"}}>Home Workouts</h2>
+      <WeeklyProgress/>
+      <div className="tabs" style={{marginBottom:18}}>
+        {WORKOUT_CATS.map(c=>(
+          <button key={c} className={"tab-chip "+(cat===c?"active":"")} onClick={()=>setCat(c)}>{c}</button>
+        ))}
+      </div>
+      <div className="grid-3-tab">
+        {list.map(w=>(
+          <div key={w.id} className="card" style={{padding:0, overflow:"hidden", cursor:"pointer"}} onClick={()=>openWorkout(w)}>
+            <div style={{position:"relative"}}>
+              <img src={w.image} style={{width:"100%",height:130,objectFit:"cover"}}/>
+              <span className="badge badge-purple" style={{position:"absolute", top:10, left:10, background:"rgba(255,255,255,.92)"}}>{w.level}</span>
+            </div>
+            <div style={{padding:14}}>
+              <div className="bold small" style={{marginBottom:6}}>{w.title}</div>
+              <div className="row gap12 tiny muted">
+                <span className="row gap8"><Icon name="clock" size={13}/>{w.duration} min</span>
+                <span className="row gap8"><Icon name="flame" size={13}/>{w.calories} kcal</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const REST_SECONDS = 12;
+function estimateSeconds(detail){
+  const text = detail || "";
+  const secMatch = text.match(/(\d+)\s*sec/);
+  if(secMatch) return parseInt(secMatch[1],10);
+  const repMatch = text.match(/(\d+)\s*reps?/);
+  if(repMatch){
+    const reps = parseInt(repMatch[1],10);
+    return Math.max(20, Math.min(60, Math.round(reps*2.5)));
+  }
+  return 30; // reasonable default for anything unparsed
+}
+
+function FollowAlong({workout, onExit}){
+  const {dispatch} = useApp();
+  const total = workout.exercises.length;
+  const [idx, setIdx] = useState(0);
+  const [phase, setPhase] = useState("prep"); // prep | exercise | rest | done
+  const [prepStep, setPrepStep] = useState(0); // 0=Ready 1=Set 2=Go!
+  const [paused, setPaused] = useState(false);
+  const [soundOn, setSoundOn] = useState(true);
+  const currentEx = workout.exercises[idx];
+  const nextEx = workout.exercises[idx+1];
+  const timedSeconds = phase==="exercise" ? estimateSeconds(currentEx.detail) : REST_SECONDS;
+  const [secondsLeft, setSecondsLeft] = useState(timedSeconds);
+
+  useEffect(()=>{
+    if(phase!=="prep") return;
+    const cues = [sound.ready, sound.set, sound.go];
+    if(soundOn) cues[prepStep]();
+    const t = setTimeout(()=>{
+      if(prepStep>=2) setPhase("exercise");
+      else setPrepStep(s=>s+1);
+    }, 750);
+    return ()=>clearTimeout(t);
+  }, [phase, prepStep, soundOn]);
+
+  useEffect(()=>{
+    if(phase==="exercise"){
+      setSecondsLeft(estimateSeconds(workout.exercises[idx].detail));
+    } else if(phase==="rest"){
+      setSecondsLeft(REST_SECONDS);
+    }
+  }, [idx, phase]);
+
+  const advance = (playSound=true)=>{
+    if(phase==="rest"){
+      if(playSound && soundOn) sound.phaseComplete();
+      setIdx(i=>i+1);
+      setPhase("exercise");
+    } else if(phase==="exercise"){
+      if(idx >= total-1){
+        setPhase("done");
+      } else {
+        if(playSound && soundOn) sound.phaseComplete();
+        setPhase("rest");
+      }
+    }
+  };
+
+  useEffect(()=>{
+    if(phase==="done" || phase==="prep" || paused) return;
+    if(soundOn && secondsLeft>0){
+      if(secondsLeft<=5) sound.tickUrgent();
+      else sound.tick();
+    }
+    if(secondsLeft<=0){ advance(); return; }
+    const id = setInterval(()=> setSecondsLeft(s=>s-1), 1000);
+    return ()=>clearInterval(id);
+  }, [secondsLeft, phase, paused, idx, soundOn]);
+
+  useEffect(()=>{
+    if(phase==="done"){
+      if(soundOn) sound.workoutComplete();
+      dispatch({type:"SET_TOAST", msg:"Workout complete! Great job 🎉"});
+      dispatch({type:"MARK_WORKOUT_DAY_DONE", date: isoDate(TODAY)});
+      setTimeout(()=>dispatch({type:"CLEAR_TOAST"}),2500);
+    }
+  }, [phase]);
+
+  const pct = phase==="done" ? 100 : Math.round(((timedSeconds-secondsLeft)/timedSeconds)*100);
+  const overallDone = phase==="done" ? total : idx;
+
+  if(phase==="prep"){
+    const label = ["Ready", "Set", "Go!"][prepStep];
+    return (
+      <div style={{minHeight:"70vh", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"40px 24px", textAlign:"center", position:"relative"}}>
+        <button className="icon-btn" style={{position:"absolute", top:0, left:4}} onClick={onExit}><Icon name="close" size={18}/></button>
+        <div key={prepStep} className="prep-pulse" style={{fontSize:64, fontWeight:900}}>
+          <span className="grad-text">{label}</span>
+        </div>
+        <p className="muted small" style={{marginTop:16}}>{workout.title}</p>
+      </div>
+    );
+  }
+
+  if(phase==="done"){
+    return (
+      <div style={{minHeight:"70vh", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"40px 24px", textAlign:"center"}}>
+        <div style={{width:88,height:88,borderRadius:"50%",background:"var(--success-light)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:22}}>
+          <Icon name="trophy" size={40} color="var(--success)"/>
+        </div>
+        <h2 style={{fontSize:24,fontWeight:900,margin:"0 0 8px"}}>Workout complete!</h2>
+        <p className="muted small" style={{marginBottom:26}}>You finished all {total} exercises in {workout.title}.</p>
+        <div className="row gap16" style={{marginBottom:30}}>
+          <div className="card center" style={{minWidth:110}}>
+            <div className="grad-text bold" style={{fontSize:22}}>{workout.duration}</div>
+            <div className="tiny muted bold">Minutes</div>
+          </div>
+          <div className="card center" style={{minWidth:110}}>
+            <div className="grad-text bold" style={{fontSize:22}}>{workout.calories}</div>
+            <div className="tiny muted bold">kcal burned</div>
+          </div>
+        </div>
+        <button className="btn btn-primary btn-lg" onClick={onExit}>Done</button>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{minHeight:"70vh", display:"flex", flexDirection:"column"}}>
+      <div style={{padding:"18px 4px"}}>
+        <div className="row between" style={{marginBottom:10}}>
+          <button className="icon-btn" onClick={onExit}><Icon name="close" size={18}/></button>
+          <span className="small bold muted">{phase==="rest" ? "Rest" : `Exercise ${idx+1} of ${total}`}</span>
+          <div className="row gap8">
+            <button className="icon-btn" title={soundOn?"Mute sounds":"Unmute sounds"} onClick={()=>setSoundOn(s=>!s)}>
+              <Icon name={soundOn ? "volume" : "volumeOff"} size={17}/>
+            </button>
+            <button className="icon-btn" onClick={()=>setPaused(p=>!p)}>
+              <Icon name={paused ? "play" : "pause"} size={17}/>
+            </button>
+          </div>
+        </div>
+        <div className="progress-bar"><div className="progress-fill" style={{width:(overallDone/total*100)+"%"}}></div></div>
+      </div>
+
+      <div style={{flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"20px 16px"}}>
+        {phase==="rest" ? (
+          <React.Fragment>
+            <span className="badge badge-blue" style={{marginBottom:18}}>Rest</span>
+            <div style={{
+              width:"min(200px, 56vw)",height:"min(200px, 56vw)",borderRadius:"50%",
+              background:`conic-gradient(var(--blue) ${pct}%, var(--border) 0)`,
+              display:"flex",alignItems:"center",justifyContent:"center",marginBottom:22,
+            }}>
+              <div style={{width:"86%",height:"86%",borderRadius:"50%",background:"var(--card)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
+                <div style={{fontSize:44,fontWeight:900}}>{secondsLeft}</div>
+                <div className="tiny muted">seconds</div>
+              </div>
+            </div>
+            {nextEx && (
+              <div className="small muted center">Up next: <span className="bold" style={{color:"var(--text)"}}>{nextEx.name}</span> · {nextEx.detail}</div>
+            )}
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <span className="badge badge-purple" style={{marginBottom:18}}>{currentEx.detail}</span>
+            <h2 style={{fontSize:25,fontWeight:900,textAlign:"center",margin:"0 0 22px",maxWidth:320}}>{currentEx.name}</h2>
+            <div style={{
+              width:"min(200px, 56vw)",height:"min(200px, 56vw)",borderRadius:"50%",
+              background:`conic-gradient(var(--purple) ${pct}%, var(--border) 0)`,
+              display:"flex",alignItems:"center",justifyContent:"center",marginBottom:10,
+            }}>
+              <div style={{width:"86%",height:"86%",borderRadius:"50%",background:"var(--card)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
+                <div style={{fontSize:44,fontWeight:900}}>{secondsLeft}</div>
+                <div className="tiny muted">seconds</div>
+              </div>
+            </div>
+          </React.Fragment>
+        )}
+      </div>
+
+      <div className="row gap12" style={{padding:"12px 4px 4px"}}>
+        <button className="btn btn-secondary btn-lg" style={{flex:1}} onClick={()=>{ if(soundOn) sound.click(); setPaused(p=>!p); }}>{paused ? "Resume" : "Pause"}</button>
+        <button className="btn btn-primary btn-lg" style={{flex:1}} onClick={()=>{ if(soundOn) sound.click(); advance(false); }}>Skip <Icon name="chevronRight" size={17}/></button>
+      </div>
+    </div>
+  );
+}
+
+function WorkoutDetail({workout, onBack}){
+  const [done,setDone] = useState({});
+  const [following, setFollowing] = useState(false);
+  const total = workout.exercises.length;
+  const doneCount = Object.values(done).filter(Boolean).length;
+
+  if(following){
+    return (
+      <div className="page">
+        <FollowAlong workout={workout} onExit={()=>setFollowing(false)}/>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div style={{position:"relative"}}>
+        <img src={workout.image} style={{width:"100%",height:220,objectFit:"cover"}}/>
+        <div style={{position:"absolute", inset:0, background:"linear-gradient(180deg, rgba(20,12,45,.15), rgba(20,12,45,.7))"}}></div>
+        <button className="icon-btn" style={{position:"absolute", top:16, left:16, background:"rgba(255,255,255,.92)", color:"#1C1830"}} onClick={onBack}><Icon name="back"/></button>
+        <div style={{position:"absolute", bottom:16, left:18, right:18, color:"#fff"}}>
+          <span className="badge" style={{background:"rgba(255,255,255,.2)", color:"#fff", marginBottom:8}}>{workout.category}</span>
+          <h2 style={{margin:"6px 0 0", fontSize:23, fontWeight:900}}>{workout.title}</h2>
+        </div>
+      </div>
+      <div className="page">
+        <div className="row gap16 small muted" style={{marginBottom:18}}>
+          <span className="row gap8"><Icon name="clock" size={15}/>{workout.duration} min</span>
+          <span className="row gap8"><Icon name="flame" size={15}/>{workout.calories} kcal</span>
+          <span className="row gap8"><Icon name="bolt" size={15}/>{workout.level}</span>
+        </div>
+
+        <button className="btn btn-primary btn-block btn-lg" style={{marginBottom:22}} onClick={()=>setFollowing(true)}>
+          <Icon name="play" size={18}/> Start guided workout
+        </button>
+
+        <div className="section">
+          <div className="row between" style={{marginBottom:8}}>
+            <span className="small bold">Progress</span>
+            <span className="small muted">{doneCount}/{total}</span>
+          </div>
+          <div className="progress-bar"><div className="progress-fill" style={{width:(doneCount/total*100)+"%"}}></div></div>
+        </div>
+
+        <div className="section">
+          <h3 style={{fontSize:16, fontWeight:800, marginBottom:12}}>Exercises</h3>
+          {workout.exercises.map((ex,i)=>(
+            <div key={i} className="list-item">
+              <button className="icon-btn" style={{width:36,height:36,minWidth:36,borderRadius:10}}
+                onClick={()=>setDone({...done, [i]: !done[i]})}>
+                {done[i] ? <Icon name="check" size={16} color="var(--success)"/> : <span className="tiny bold muted">{i+1}</span>}
+              </button>
+              <div style={{flex:1}}>
+                <div className="small bold" style={{textDecoration: done[i] ? "line-through" : "none", color: done[i] ? "var(--muted)" : "var(--text)"}}>{ex.name}</div>
+              </div>
+              <span className="tiny muted bold">{ex.detail}</span>
+            </div>
+          ))}
+        </div>
+
+        <button className="btn btn-secondary btn-block btn-lg" onClick={onBack}>
+          {doneCount===total ? "Workout complete 🎉" : "Finish later"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function GymCard({gym, onClick}){
+  const {state} = useApp();
+  const isMember = state.user && gym.members.some(m=>m.userId===state.user.id);
+  const usedPass = state.user && gym.dayPasses.some(p=>p.userId===state.user.id);
+  return (
+    <div className="card" style={{padding:0, overflow:"hidden", marginBottom:14, cursor:"pointer"}} onClick={onClick}>
+      <div style={{position:"relative"}}>
+        <img src={gym.image} style={{width:"100%",height:140,objectFit:"cover"}}/>
+        {isMember && <span className="badge badge-success" style={{position:"absolute", top:10, left:10}}>Member</span>}
+        {!isMember && !usedPass && <span className="badge" style={{position:"absolute", top:10, left:10, background:"rgba(255,255,255,.92)", color:"var(--purple)"}}>Free day pass</span>}
+      </div>
+      <div style={{padding:16}}>
+        <div className="row between" style={{marginBottom:4}}>
+          <div className="bold" style={{fontSize:15}}>{gym.name}</div>
+          <Stars rating={gym.rating}/>
+        </div>
+        <div className="row gap8 tiny muted" style={{marginBottom:10}}>
+          <Icon name="mapPin" size={13}/>{gym.area}, {gym.city}
+        </div>
+        <div className="row between">
+          <span className="small bold">{gym.plans[0] ? "From "+gym.plans[0].price+" ETB/"+gym.plans[0].period : "Plans coming soon"}</span>
+          <span className="tiny muted">{gym.reviews} reviews</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GymsTab({openGym}){
+  const {state} = useApp();
+  const [area, setArea] = useState("All Areas");
+  const list = area==="All Areas" ? state.gyms : state.gyms.filter(g=>g.area===area);
+  return (
+    <div className="page">
+      <h2 style={{fontSize:21,fontWeight:900,margin:"4px 0 16px"}}>Gyms near you</h2>
+      <div className="tabs" style={{marginBottom:18}}>
+        {AREAS.map(a=>(
+          <button key={a} className={"tab-chip "+(area===a?"active":"")} onClick={()=>setArea(a)}>{a}</button>
+        ))}
+      </div>
+      {list.length===0 ? <EmptyState icon="building" title="No gyms in this area yet" sub="Check back soon or browse all areas."/> :
+        list.map(g=><GymCard key={g.id} gym={g} onClick={()=>openGym(g.id)}/>)
+      }
+    </div>
+  );
+}
+
+function StarPicker({value, onChange, size=22}){
+  return (
+    <div className="row gap8">
+      {[1,2,3,4,5].map(n=>(
+        <button key={n} type="button" onClick={()=>onChange(n)} style={{background:"none", border:"none", cursor:"pointer", padding:2}}>
+          <Icon name="star" size={size} color={n<=value ? "#D97706" : "var(--border)"}/>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function ReviewsPanel({gym}){
+  const {state, dispatch} = useApp();
+  const [rating, setRating] = useState(5);
+  const [text, setText] = useState("");
+  const reviews = gym.reviewsList || [];
+  const membership = state.user && gym.members.find(m=>m.userId===state.user.id);
+  const tenureMonths = membership ? monthsSince(membership.since) : 0;
+  const alreadyReviewed = reviews.some(r=>r.userId===state.user?.id);
+  const eligible = membership && tenureMonths>=3 && !alreadyReviewed;
+
+  const submit = ()=>{
+    dispatch({type:"ADD_REVIEW", gymId: gym.id, rating, text: text.trim()});
+    setText("");
+    dispatch({type:"SET_TOAST", msg:"Review posted — thanks for the feedback!"});
+    setTimeout(()=>dispatch({type:"CLEAR_TOAST"}),2200);
+  };
+
+  return (
+    <div>
+      <div className="card row gap16" style={{marginBottom:18, alignItems:"center"}}>
+        <div style={{textAlign:"center"}}>
+          <div className="bold" style={{fontSize:28}}>{gym.rating}</div>
+          <Stars rating={gym.rating}/>
+        </div>
+        <div style={{flex:1}}>
+          <div className="small bold">{gym.reviews} review{gym.reviews===1?"":"s"}</div>
+          <div className="tiny muted">from verified GymBuddy members</div>
+        </div>
+      </div>
+
+      {membership && (
+        eligible ? (
+          <div className="card" style={{marginBottom:18}}>
+            <div className="bold small" style={{marginBottom:10}}>Write a review</div>
+            <div style={{marginBottom:12}}><StarPicker value={rating} onChange={setRating}/></div>
+            <textarea className="input" placeholder="How's your experience been?" value={text} onChange={e=>setText(e.target.value)} style={{marginBottom:12}}/>
+            <button className="btn btn-primary btn-block" onClick={submit}>Post review</button>
+          </div>
+        ) : !alreadyReviewed ? (
+          <div className="card row gap10" style={{marginBottom:18, background:"var(--purple-light)", border:"none"}}>
+            <Icon name="clock" size={16} color="var(--purple)"/>
+            <span className="tiny" style={{color:"var(--text)"}}>Reviews open up after 3 months of membership — you're at {tenureMonths} month{tenureMonths===1?"":"s"} with {gym.name}.</span>
+          </div>
+        ) : null
+      )}
+
+      {reviews.length===0 ? <EmptyState icon="star" title="No reviews yet" sub="Reviews unlock for members after 3 months, so early feedback is extra trustworthy."/> :
+        reviews.map(r=>(
+          <div key={r.id} className="card" style={{marginBottom:12}}>
+            <div className="row between" style={{marginBottom:8}}>
+              <div className="row gap10">
+                <div className="avatar" style={{width:32,height:32,fontSize:11}}>{r.name.split(" ").map(x=>x[0]).slice(0,2).join("")}</div>
+                <span className="small bold">{r.name}</span>
+              </div>
+              <Stars rating={r.rating}/>
+            </div>
+            {r.text && <p className="small muted" style={{margin:"0 0 6px", lineHeight:1.5}}>{r.text}</p>}
+            <div className="tiny muted">{r.date}</div>
+          </div>
+        ))
+      }
+    </div>
+  );
+}
+
+function GymDetail({gymId, onBack}){
+  const {state, dispatch} = useApp();
+  const gym = state.gyms.find(g=>g.id===gymId);
+  const [showPlan, setShowPlan] = useState(null);
+  const [showPass, setShowPass] = useState(false);
+  const [tab, setTab] = useState("about");
+  const [lightbox, setLightbox] = useState(null);
+  if(!gym) return null;
+
+  const isMember = state.user && gym.members.some(m=>m.userId===state.user.id);
+  const myMembership = state.user && gym.members.find(m=>m.userId===state.user.id);
+  const usedPass = state.user && gym.dayPasses.some(p=>p.userId===state.user.id);
+
+  return (
+    <div>
+      <div style={{position:"relative"}}>
+        <img src={gym.cover} style={{width:"100%",height:200,objectFit:"cover"}}/>
+        <div style={{position:"absolute", inset:0, background:"linear-gradient(180deg, rgba(20,12,45,.1), rgba(20,12,45,.75))"}}></div>
+        <button className="icon-btn" style={{position:"absolute", top:16, left:16, background:"rgba(255,255,255,.92)", color:"#1C1830"}} onClick={onBack}><Icon name="back"/></button>
+        <div style={{position:"absolute", bottom:16, left:18, right:18, color:"#fff"}}>
+          <h2 style={{margin:"0 0 4px", fontSize:22, fontWeight:900}}>{gym.name}</h2>
+          <div className="row gap12 small">
+            <span className="row gap8"><Icon name="mapPin" size={14}/>{gym.area}, {gym.city}</span>
+            <Stars rating={gym.rating}/>
+          </div>
+        </div>
+      </div>
+
+      <div className="page">
+        {isMember && (
+          <div className="card" style={{background:"var(--success-light)", border:"none", marginBottom:20}}>
+            <div className="row gap10"><Icon name="checkCircle" size={18} color="var(--success)"/><span className="small bold" style={{color:"var(--success)"}}>You're a {myMembership.plan} member here</span></div>
+          </div>
+        )}
+
+        <div className="tabs" style={{marginBottom:18}}>
+          {["about","posts","plans","classes","reviews","updates"].map(t=>(
+            <button key={t} className={"tab-chip "+(tab===t?"active":"")} onClick={()=>setTab(t)}>{t[0].toUpperCase()+t.slice(1)}</button>
+          ))}
+        </div>
+
+        {tab==="about" && (
+          <div>
+            <p className="small" style={{lineHeight:1.6, color:"var(--muted)"}}>{gym.description}</p>
+            <div className="section-head" style={{marginTop:20}}><h3>Amenities</h3></div>
+            <div className="row gap10" style={{flexWrap:"wrap"}}>
+              {gym.amenities.map(a=><span key={a} className="badge badge-muted">{a}</span>)}
+            </div>
+
+            {!isMember && (
+              <div style={{marginTop:26}}>
+                {!usedPass && (
+                  <button className="btn btn-secondary btn-block btn-lg" style={{marginBottom:12}} onClick={()=>setShowPass(true)}>
+                    <Icon name="gift" size={18}/> Get free first-time day pass
+                  </button>
+                )}
+                <button className="btn btn-primary btn-block btn-lg" onClick={()=>setTab("plans")}>
+                  <Icon name="dumbbell" size={18}/> View membership plans
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {tab==="posts" && (
+          <div>
+            {(!gym.posts || gym.posts.length===0) ? <EmptyState icon="image" title="No posts yet" sub="This gym hasn't shared any photos yet."/> : (
+              <div className="grid-2">
+                {gym.posts.map(p=>(
+                  <div key={p.id} className="card" style={{padding:0, overflow:"hidden", cursor:"pointer"}} onClick={()=>setLightbox(p)}>
+                    <img src={p.image} style={{width:"100%",height:140,objectFit:"cover"}}/>
+                    <div style={{padding:12}}>
+                      {p.caption && <div className="tiny" style={{marginBottom:4}}>{p.caption}</div>}
+                      <div className="tiny muted">{p.date}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {tab==="plans" && (
+          <div>
+            {gym.plans.length===0 ? <EmptyState icon="dollar" title="No plans published yet" sub="This gym hasn't listed membership pricing."/> : (
+              <React.Fragment>
+                <div className="row gap10" style={{marginBottom:14, background:"var(--blue-light)", padding:"10px 14px", borderRadius:12}}>
+                  <Icon name="dollar" size={15} color="var(--blue)"/>
+                  <span className="tiny" style={{color:"var(--text)"}}><b>Pay on arrival</b> — reserve a plan here, pay in person at the gym.</span>
+                </div>
+                {gym.plans.map(p=>(
+                  <div key={p.id} className="card row between" style={{marginBottom:12}}>
+                    <div>
+                      <div className="bold" style={{fontSize:16}}>{p.name}</div>
+                      <div className="small muted">Per {p.period}</div>
+                    </div>
+                    <div style={{textAlign:"right"}}>
+                      <div className="bold grad-text" style={{fontSize:18}}>{p.price} ETB</div>
+                      <button className="btn btn-primary btn-sm" style={{marginTop:8}} onClick={()=>setShowPlan(p)} disabled={isMember && myMembership.plan===p.name}>
+                        {isMember && myMembership.plan===p.name ? "Current plan" : "Choose"}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </React.Fragment>
+            )}
+          </div>
+        )}
+
+        {tab==="classes" && (
+          <div>
+            {gym.classes.length===0 ? <EmptyState icon="calendar" title="No classes scheduled" sub="This gym hasn't posted any classes yet."/> :
+              gym.classes.map(c=><ClassCard key={c.id} gym={gym} cls={c}/>)
+            }
+          </div>
+        )}
+
+        {tab==="reviews" && <ReviewsPanel gym={gym}/>}
+
+        {tab==="updates" && (
+          <div>
+            {gym.updates.length===0 ? <EmptyState icon="megaphone" title="No updates yet" sub="This gym hasn't posted any announcements."/> :
+              gym.updates.map(u=>(
+                <div key={u.id} className="card" style={{marginBottom:12}}>
+                  <div className="row gap10" style={{marginBottom:8}}>
+                    <Icon name="megaphone" size={15} color="var(--purple)"/>
+                    <span className="tiny muted bold">{u.date}</span>
+                  </div>
+                  <div className="small">{u.text}</div>
+                </div>
+              ))
+            }
+          </div>
+        )}
+      </div>
+
+      {showPass && (
+        <Modal onClose={()=>setShowPass(false)}>
+          <ModalHeader title="Free Day Pass" onClose={()=>setShowPass(false)}/>
+          <p className="small muted" style={{marginBottom:18}}>Show this pass at {gym.name}'s front desk for a free one-day visit. Valid today only.</p>
+          <div className="center" style={{marginBottom:18}}>
+            <QR text={"GYMBUDDY-DAYPASS:"+state.user.code+":"+gym.id} size={170}/>
+          </div>
+          <div className="row between small" style={{marginBottom:6}}><span className="muted">Member</span><span className="bold">{state.user.name}</span></div>
+          <div className="row between small" style={{marginBottom:6}}><span className="muted">Gym</span><span className="bold">{gym.name}</span></div>
+          <div className="row between small" style={{marginBottom:20}}><span className="muted">Valid</span><span className="bold">Jul 3, 2026</span></div>
+          <button className="btn btn-primary btn-block btn-lg" onClick={()=>{
+            dispatch({type:"GET_DAY_PASS", gymId: gym.id});
+            dispatch({type:"SET_TOAST", msg:"Day pass ready — enjoy your visit!"});
+            setTimeout(()=>dispatch({type:"CLEAR_TOAST"}),2500);
+            setShowPass(false);
+          }}>Confirm & activate pass</button>
+        </Modal>
+      )}
+
+      {showPlan && (
+        <Modal onClose={()=>setShowPlan(null)}>
+          <ModalHeader title="Confirm membership" onClose={()=>setShowPlan(null)}/>
+          <div className="card" style={{background:"var(--purple-light)", border:"none", marginBottom:18}}>
+            <div className="bold" style={{fontSize:17}}>{showPlan.name} — {gym.name}</div>
+            <div className="small muted">{showPlan.price} ETB / {showPlan.period}</div>
+          </div>
+          <div className="card row gap10" style={{background:"var(--blue-light)", border:"none", marginBottom:18}}>
+            <Icon name="dollar" size={16} color="var(--blue)"/>
+            <span className="tiny" style={{color:"var(--text)"}}><b>Pay on arrival</b> — no payment happens in the app. Pay {showPlan.price} ETB in person at {gym.name} to activate your membership.</span>
+          </div>
+          <p className="small muted" style={{marginBottom:20}}>You're joining as <b style={{color:"var(--text)"}}>{state.user.name}</b>. Your digital Gym ID will update instantly.</p>
+          <button className="btn btn-primary btn-block btn-lg" onClick={()=>{
+            dispatch({type:"JOIN_GYM", gymId: gym.id, planName: showPlan.name});
+            dispatch({type:"SET_TOAST", msg:"Welcome to "+gym.name+"! Pay "+showPlan.price+" ETB on arrival."});
+            setTimeout(()=>dispatch({type:"CLEAR_TOAST"}),2500);
+            setShowPlan(null);
+          }}>Reserve membership</button>
+        </Modal>
+      )}
+
+      {lightbox && (
+        <div className="modal-overlay" onClick={e=>{ if(e.target===e.currentTarget) setLightbox(null); }}>
+          <div style={{maxWidth:560, width:"100%"}}>
+            <div className="row" style={{justifyContent:"flex-end", marginBottom:10}}>
+              <button className="icon-btn" style={{background:"rgba(255,255,255,.92)", color:"#1C1830"}} onClick={()=>setLightbox(null)}><Icon name="close" size={18}/></button>
+            </div>
+            <img src={lightbox.image} style={{width:"100%", borderRadius:18, maxHeight:"70vh", objectFit:"cover"}}/>
+            {lightbox.caption && (
+              <div className="card" style={{marginTop:12}}>
+                <div className="small">{lightbox.caption}</div>
+                <div className="tiny muted" style={{marginTop:4}}>{lightbox.date}</div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ClassCard({gym, cls}){
+  const {state, dispatch} = useApp();
+  const reserved = state.user && cls.attendees.some(a=>a.userId===state.user.id);
+  const full = cls.attendees.length >= cls.capacity;
+  return (
+    <div className="card" style={{marginBottom:12}}>
+      <div className="row between" style={{marginBottom:10}}>
+        <div>
+          <div className="bold" style={{fontSize:15}}>{cls.title}</div>
+          <div className="tiny muted">{gym.name}</div>
+        </div>
+        <span className="badge badge-blue">{cls.price} ETB</span>
+      </div>
+      <div className="row gap16 tiny muted" style={{marginBottom:12}}>
+        <span className="row gap8"><Icon name="calendar" size={13}/>{cls.day}</span>
+        <span className="row gap8"><Icon name="clock" size={13}/>{cls.time}</span>
+      </div>
+      <div className="row between">
+        <span className="tiny muted">{cls.instructor} · {cls.attendees.length}/{cls.capacity} spots</span>
+        <button className="btn btn-sm" style={reserved ? {background:"var(--success-light)", color:"var(--success)"} : {background:"linear-gradient(135deg,var(--grad-a),var(--grad-b))", color:"#fff"}}
+          disabled={reserved||full}
+          onClick={()=>{
+            dispatch({type:"RESERVE_CLASS", gymId: gym.id, classId: cls.id});
+            dispatch({type:"SET_TOAST", msg:"Spot reserved in "+cls.title});
+            setTimeout(()=>dispatch({type:"CLEAR_TOAST"}),2200);
+          }}>
+          {reserved ? "Reserved ✓" : full ? "Class full" : "Reserve spot"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function ClassesTab({openGym}){
+  const {state} = useApp();
+  const [gymFilter, setGymFilter] = useState("mine");
+  const [view, setView] = useState("list"); // list | calendar
+  const allClasses = state.gyms.flatMap(g => g.classes.map(c => ({...c, gym:g})));
+  const mine = allClasses.filter(c=>c.attendees.some(a=>a.userId===state.user.id));
+  const list = gymFilter==="all" ? allClasses : gymFilter==="mine" ? mine : allClasses.filter(c=>c.gym.id===gymFilter);
+  return (
+    <div className="page">
+      <div className="row between" style={{marginBottom:16}}>
+        <h2 style={{fontSize:21,fontWeight:900,margin:0}}>Classes</h2>
+        <div className="row gap8">
+          <button className={"icon-btn "+(view==="list"?"on":"")} title="List view" onClick={()=>setView("list")}><Icon name="ticket" size={16}/></button>
+          <button className={"icon-btn "+(view==="calendar"?"on":"")} title="Calendar view" onClick={()=>setView("calendar")}><Icon name="calendar" size={16}/></button>
+        </div>
+      </div>
+      <div className="tabs" style={{marginBottom:18}}>
+        <button className={"tab-chip "+(gymFilter==="mine"?"active":"")} onClick={()=>setGymFilter("mine")}>My Classes</button>
+        <button className={"tab-chip "+(gymFilter==="all"?"active":"")} onClick={()=>setGymFilter("all")}>All gyms</button>
+        {state.gyms.filter(g=>g.classes.length>0).map(g=>(
+          <button key={g.id} className={"tab-chip "+(gymFilter===g.id?"active":"")} onClick={()=>setGymFilter(g.id)}>{g.name}</button>
+        ))}
+      </div>
+      {list.length===0 ? (
+        <EmptyState icon="calendar" title={gymFilter==="mine" ? "No reserved classes yet" : "No classes found"} sub={gymFilter==="mine" ? "Reserve a spot in a class to see it here." : "Try a different gym filter."}/>
+      ) : view==="calendar" ? (
+        <WeeklyCalendar entries={list.map(c=>({cls:c, gym:c.gym}))}/>
+      ) : (
+        list.map(c=><ClassCard key={c.gym.id+c.id} gym={c.gym} cls={c}/>)
+      )}
+    </div>
+  );
+}
+
+function MyIdTab(){
+  const {state} = useApp();
+  const myGyms = state.gyms.filter(g => g.members.some(m=>m.userId===state.user.id));
+  const myCheckins = state.checkins
+    .filter(c => c.userId===state.user.id && daysBetween(c.date, TODAY) <= 365)
+    .sort((a,b)=> b.date - a.date);
+
+  return (
+    <div className="page">
+      <h2 style={{fontSize:21,fontWeight:900,margin:"4px 0 20px"}}>My Gym ID</h2>
+
+      <div className="card" style={{background:"linear-gradient(135deg,var(--grad-a),var(--grad-b))", border:"none", color:"#fff", marginBottom:22}}>
+        <div className="row between" style={{marginBottom:20}}>
+          <div>
+            <div className="tiny" style={{opacity:.8, letterSpacing:.5, textTransform:"uppercase", fontWeight:700}}>GymBuddy Member</div>
+            <div className="bold" style={{fontSize:19}}>{state.user.name}</div>
+          </div>
+          <div style={{width:42,height:42,borderRadius:12,background:"rgba(255,255,255,.2)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <Icon name="dumbbell" size={20} color="#fff"/>
+          </div>
+        </div>
+        <div className="center" style={{background:"#fff", borderRadius:16, padding:16, marginBottom:16}}>
+          <QR text={"GYMBUDDY-ID:"+state.user.code} size={170}/>
+        </div>
+        <div className="row between tiny">
+          <span style={{opacity:.85}}>Member ID</span>
+          <span className="bold" style={{letterSpacing:1}}>{state.user.code}</span>
+        </div>
+      </div>
+
+      <p className="small muted center" style={{marginBottom:22}}>Show this QR code at the front desk. Gym staff scan it from their GymBuddy dashboard to verify your entry.</p>
+
+      <div className="section-head"><h3>Your memberships</h3></div>
+      {myGyms.length===0 ? <EmptyState icon="dumbbell" title="No memberships yet" sub="Join a gym to see it here."/> :
+        myGyms.map(g=>{
+          const m = g.members.find(x=>x.userId===state.user.id);
+          const due = new Date(m.dueDate);
+          const d = isNaN(due) ? null : daysBetween(TODAY, due);
+          const overdue = d!==null && d<0;
+          const frozen = m.status==="frozen";
+          return (
+            <div key={g.id} className="card" style={{marginBottom:12}}>
+              <div className="row between" style={{marginBottom:10}}>
+                <div className="row gap12">
+                  <img src={g.image} style={{width:44,height:44,borderRadius:11,objectFit:"cover"}}/>
+                  <div>
+                    <div className="bold small">{g.name}</div>
+                    <div className="tiny muted">Since {m.since}</div>
+                  </div>
+                </div>
+                <span className="badge badge-success">{m.plan}</span>
+              </div>
+              <div className="row between small">
+                <span className="muted">{frozen ? "Membership status" : "Payment due"}</span>
+                <span className={"badge "+(frozen?"badge-muted":overdue?"badge-danger":"badge-warn")}>
+                  {frozen ? "Frozen" : overdue ? "Overdue · "+m.dueDate : "Due "+m.dueDate}
+                </span>
+              </div>
+            </div>
+          );
+        })
+      }
+
+      <div className="section-head" style={{marginTop:8}}><h3>Check-in history</h3></div>
+      <p className="tiny muted" style={{marginTop:-8, marginBottom:14}}>Your last 12 months of verified gym visits.</p>
+      {myCheckins.length===0 ? <EmptyState icon="clock" title="No check-ins yet" sub="When a gym scans your ID at the door, it'll show up here."/> :
+        myCheckins.map(c=>(
+          <div key={c.id} className="list-item">
+            <div style={{width:36,height:36,borderRadius:11,background:"var(--purple-light)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+              <Icon name="scan" size={16} color="var(--purple)"/>
+            </div>
+            <div style={{flex:1}}>
+              <div className="small bold">{c.gymName}</div>
+              <div className="tiny muted">{fmtDate(c.date)} · {c.time}</div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  );
+}
+
+/* ======================= OWNER APP ======================= */
+function OwnerApp(){
+  const {state} = useApp();
+  const gym = state.gyms.find(g=>g.id===state.ownerGymId);
+  const [tab, setTab] = useState("dashboard");
+
+  const navItems = [
+    {key:"dashboard", icon:"home", label:"Overview"},
+    {key:"profile", icon:"building", label:"Profile"},
+    {key:"classes", icon:"calendar", label:"Classes"},
+    {key:"members", icon:"scan", label:"Members"},
+  ];
+
+  if(!gym) return null;
+
+  let content;
+  if(tab==="dashboard") content = <OwnerDashboard gym={gym} goTab={setTab}/>;
+  else if(tab==="profile") content = <OwnerProfile gym={gym}/>;
+  else if(tab==="classes") content = <OwnerClasses gym={gym}/>;
+  else if(tab==="members") content = <OwnerMembers gym={gym}/>;
+
+  return (
+    <React.Fragment>
+      <Header/>
+      <div className="app-body">
+        <nav className="bottomnav">
+          <div className="bottomnav-inner">
+            {navItems.map(n=>(
+              <button key={n.key} className={"navitem "+(tab===n.key?"active":"")} onClick={()=>setTab(n.key)}>
+                <Icon name={n.icon} size={21}/>
+                <span>{n.label}</span>
+              </button>
+            ))}
+          </div>
+        </nav>
+        <div className="app-main">{content}</div>
+      </div>
+    </React.Fragment>
+  );
+}
+
+function OwnerDashboard({gym, goTab}){
+  const revenue = gym.members.reduce((sum,m)=>{
+    const plan = gym.plans.find(p=>p.name===m.plan);
+    return sum + (plan ? plan.price : 0);
+  },0) + gym.dayPasses.length * gym.dayPassPrice;
+
+  return (
+    <div className="page">
+      <div className="row gap12" style={{marginBottom:20}}>
+        <img src={gym.image} style={{width:52,height:52,borderRadius:14,objectFit:"cover"}}/>
+        <div>
+          <h2 style={{fontSize:20,fontWeight:900,margin:0}}>{gym.name}</h2>
+          <div className="tiny muted row gap8"><Icon name="mapPin" size={13}/>{gym.area}, {gym.city}</div>
+        </div>
+      </div>
+
+      <div className="grid-2" style={{marginBottom:22}}>
+        <div className="card center">
+          <div className="grad-text bold" style={{fontSize:24}}>{gym.members.length}</div>
+          <div className="tiny muted bold">Active members</div>
+        </div>
+        <div className="card center">
+          <div className="grad-text bold" style={{fontSize:24}}>{gym.dayPasses.length}</div>
+          <div className="tiny muted bold">Day passes issued</div>
+        </div>
+        <div className="card center">
+          <div className="grad-text bold" style={{fontSize:24}}>{gym.classes.reduce((s,c)=>s+c.attendees.length,0)}</div>
+          <div className="tiny muted bold">Class reservations</div>
+        </div>
+        <div className="card center">
+          <div className="grad-text bold" style={{fontSize:24}}>{revenue.toLocaleString()}</div>
+          <div className="tiny muted bold">Est. revenue (ETB)</div>
+        </div>
+      </div>
+
+      <div className="section">
+        <div className="section-head"><h3>Recent members</h3><button className="link" onClick={()=>goTab("members")}>Check-in</button></div>
+        {gym.members.length===0 ? <EmptyState icon="users" title="No members yet" sub="Members will appear here once customers join your gym."/> :
+          gym.members.slice(0,4).map((m,i)=>(
+            <div key={i} className="list-item">
+              <div className="avatar" style={{width:38,height:38,fontSize:13}}>{m.name.split(" ").map(x=>x[0]).slice(0,2).join("")}</div>
+              <div style={{flex:1}}>
+                <div className="small bold">{m.name}</div>
+                <div className="tiny muted">Since {m.since}</div>
+              </div>
+              <span className="badge badge-success">{m.plan}</span>
+            </div>
+          ))
+        }
+      </div>
+
+      <div className="section">
+        <div className="section-head"><h3>Post an update</h3></div>
+        <QuickUpdateForm gym={gym}/>
+      </div>
+
+      <div className="section">
+        <div className="section-head"><h3>Recent updates</h3></div>
+        {gym.updates.length===0 ? <EmptyState icon="megaphone" title="No updates yet" sub="Post news, promos, or announcements for your members."/> :
+          gym.updates.slice(0,3).map(u=>(
+            <div key={u.id} className="card row between" style={{marginBottom:10, alignItems:"flex-start"}}>
+              <div style={{flex:1}}>
+                <div className="tiny muted bold" style={{marginBottom:4}}>{u.date}</div>
+                <div className="small">{u.text}</div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  );
+}
+
+function QuickUpdateForm({gym}){
+  const {dispatch} = useApp();
+  const [text,setText] = useState("");
+  return (
+    <div className="card">
+      <textarea className="input" placeholder="Share news, a promo, or a schedule change with your members..." value={text} onChange={e=>setText(e.target.value)} style={{marginBottom:12}}/>
+      <button className="btn btn-primary btn-block" disabled={!text.trim()} onClick={()=>{
+        dispatch({type:"ADD_UPDATE", gymId: gym.id, text: text.trim()});
+        setText("");
+        dispatch({type:"SET_TOAST", msg:"Update posted to members"});
+        setTimeout(()=>dispatch({type:"CLEAR_TOAST"}),2200);
+      }}><Icon name="megaphone" size={16}/> Post update</button>
+    </div>
+  );
+}
+
+function PhotoUploadButton({label="Change photo", onUploaded, className, icon="camera"}){
+  const inputRef = useRef(null);
+  const [busy, setBusy] = useState(false);
+  return (
+    <React.Fragment>
+      <button type="button" className={className || "btn btn-secondary btn-sm"} disabled={busy} onClick={()=>inputRef.current && inputRef.current.click()}>
+        <Icon name={icon} size={15}/> {busy ? "Uploading..." : label}
+      </button>
+      <input
+        ref={inputRef} type="file" accept="image/*" style={{display:"none"}}
+        onChange={async (e)=>{
+          const file = e.target.files && e.target.files[0];
+          if(!file) return;
+          setBusy(true);
+          try{
+            const dataUrl = await fileToDataUrl(file);
+            onUploaded(dataUrl);
+          }catch(err){}
+          setBusy(false);
+          e.target.value = "";
+        }}
+      />
+    </React.Fragment>
+  );
+}
+
+function OwnerProfile({gym}){
+  const [sub, setSub] = useState("details"); // details | pricing | posts
+  return (
+    <div className="page">
+      <h2 style={{fontSize:21,fontWeight:900,margin:"4px 0 16px"}}>Gym Profile</h2>
+      <div className="tabs" style={{marginBottom:20}}>
+        <button className={"tab-chip "+(sub==="details"?"active":"")} onClick={()=>setSub("details")}>Details</button>
+        <button className={"tab-chip "+(sub==="pricing"?"active":"")} onClick={()=>setSub("pricing")}>Pricing</button>
+        <button className={"tab-chip "+(sub==="posts"?"active":"")} onClick={()=>setSub("posts")}>Posts</button>
+      </div>
+      {sub==="details" && <OwnerProfileDetails gym={gym}/>}
+      {sub==="pricing" && <OwnerPlans gym={gym}/>}
+      {sub==="posts" && <OwnerPosts gym={gym}/>}
+    </div>
+  );
+}
+
+function OwnerProfileDetails({gym}){
+  const {dispatch} = useApp();
+  const [editing, setEditing] = useState(false);
+  const [name, setName] = useState(gym.name);
+  const [description, setDescription] = useState(gym.description);
+  const [dayPassPrice, setDayPassPrice] = useState(gym.dayPassPrice);
+  const [amenityInput, setAmenityInput] = useState("");
+
+  const save = ()=>{
+    dispatch({type:"UPDATE_GYM", gymId: gym.id, patch:{name, description, dayPassPrice:Number(dayPassPrice)}});
+    setEditing(false);
+    dispatch({type:"SET_TOAST", msg:"Gym profile updated"});
+    setTimeout(()=>dispatch({type:"CLEAR_TOAST"}),2200);
+  };
+
+  const uploadCover = (dataUrl)=>{
+    dispatch({type:"UPDATE_GYM", gymId: gym.id, patch:{cover:dataUrl, image:dataUrl}});
+    dispatch({type:"SET_TOAST", msg:"Cover photo updated"});
+    setTimeout(()=>dispatch({type:"CLEAR_TOAST"}),2200);
+  };
+
+  const removeAmenity = (a)=>{
+    dispatch({type:"UPDATE_GYM", gymId: gym.id, patch:{amenities: gym.amenities.filter(x=>x!==a)}});
+  };
+
+  return (
+    <div>
+      <div className="row" style={{justifyContent:"flex-end", marginBottom:12}}>
+        <button className="icon-btn" onClick={()=>setEditing(!editing)}><Icon name={editing?"close":"edit"} size={17}/></button>
+      </div>
+
+      <div style={{position:"relative", marginBottom:18}}>
+        <img src={gym.cover} style={{width:"100%",height:150,objectFit:"cover",borderRadius:16}}/>
+        <div style={{position:"absolute", bottom:12, right:12}}>
+          <PhotoUploadButton label="Change cover" onUploaded={uploadCover} className="btn btn-secondary btn-sm" icon="upload"/>
+        </div>
+      </div>
+
+      {editing ? (
+        <div className="card" style={{marginBottom:18}}>
+          <div className="field"><label>Gym name</label><input className="input" value={name} onChange={e=>setName(e.target.value)}/></div>
+          <div className="field"><label>Description</label><textarea className="input" value={description} onChange={e=>setDescription(e.target.value)}/></div>
+          <div className="field"><label>Day pass price (ETB)</label><input className="input" type="number" value={dayPassPrice} onChange={e=>setDayPassPrice(e.target.value)}/></div>
+          <button className="btn btn-primary btn-block" onClick={save}>Save changes</button>
+        </div>
+      ) : (
+        <div className="card" style={{marginBottom:18}}>
+          <div className="bold" style={{fontSize:17, marginBottom:8}}>{gym.name}</div>
+          <p className="small muted" style={{lineHeight:1.6, marginBottom:12}}>{gym.description}</p>
+          <div className="row between small">
+            <span className="muted">Day pass price</span>
+            <span className="bold">{gym.dayPassPrice} ETB</span>
+          </div>
+        </div>
+      )}
+
+      <div className="section-head"><h3>Amenities</h3></div>
+      <div className="row gap10" style={{flexWrap:"wrap", marginBottom:14}}>
+        {gym.amenities.map(a=>(
+          <span key={a} className="badge badge-muted row gap8">
+            {a}
+            <button onClick={()=>removeAmenity(a)} style={{background:"none", border:"none", padding:0, margin:0, display:"flex", cursor:"pointer", color:"inherit"}}>
+              <Icon name="close" size={11}/>
+            </button>
+          </span>
+        ))}
+      </div>
+      <div className="row gap10">
+        <input className="input" placeholder="Add amenity (e.g. Sauna)" value={amenityInput} onChange={e=>setAmenityInput(e.target.value)}/>
+        <button className="btn btn-secondary" style={{flexShrink:0}} onClick={()=>{
+          if(!amenityInput.trim()) return;
+          dispatch({type:"UPDATE_GYM", gymId: gym.id, patch:{amenities:[...gym.amenities, amenityInput.trim()]}});
+          setAmenityInput("");
+        }}><Icon name="plus" size={16}/></button>
+      </div>
+    </div>
+  );
+}
+
+function OwnerPlans({gym}){
+  const {dispatch} = useApp();
+  const [showAdd, setShowAdd] = useState(false);
+  const [name,setName]=useState("");
+  const [price,setPrice]=useState("");
+  const [period,setPeriod]=useState("month");
+
+  return (
+    <div>
+      <div className="row between" style={{marginBottom:14}}>
+        <p className="small muted" style={{margin:0}}>You're in full control of your gym's membership pricing.</p>
+        <button className="icon-btn on" style={{flexShrink:0, marginLeft:12}} onClick={()=>setShowAdd(true)}><Icon name="plus" size={18}/></button>
+      </div>
+
+      {gym.plans.length===0 ? <EmptyState icon="dollar" title="No plans yet" sub="Add your first membership plan to start attracting members." action={<button className="btn btn-primary" onClick={()=>setShowAdd(true)}>Add a plan</button>}/> :
+        gym.plans.map(p=>(
+          <div key={p.id} className="card row between" style={{marginBottom:12}}>
+            <div>
+              <div className="bold" style={{fontSize:16}}>{p.name}</div>
+              <div className="small muted">Billed per {p.period}</div>
+            </div>
+            <div className="row gap12">
+              <span className="bold grad-text" style={{fontSize:17}}>{p.price} ETB</span>
+              <button className="icon-btn" style={{width:38,height:38,minWidth:38}} onClick={()=>dispatch({type:"REMOVE_PLAN", gymId:gym.id, planId:p.id})}><Icon name="trash" size={15}/></button>
+            </div>
+          </div>
+        ))
+      }
+
+      <div className="section" style={{marginTop:10}}>
+        <div className="card" style={{background:"var(--blue-light)", border:"none"}}>
+          <div className="row gap10"><Icon name="dollar" size={17} color="var(--blue)"/><span className="bold small">Day pass price</span></div>
+          <p className="tiny muted" style={{margin:"8px 0 0"}}>Currently <b style={{color:"var(--text)"}}>{gym.dayPassPrice} ETB</b>. First visits are free through the app's day-pass incentive — you're only charging returning drop-ins. Edit this from the Details tab.</p>
+        </div>
+      </div>
+
+      {showAdd && (
+        <Modal onClose={()=>setShowAdd(false)}>
+          <ModalHeader title="Add membership plan" onClose={()=>setShowAdd(false)}/>
+          <div className="field"><label>Plan name</label><input className="input" placeholder="e.g. Monthly" value={name} onChange={e=>setName(e.target.value)}/></div>
+          <div className="input-row">
+            <div className="field"><label>Price (ETB)</label><input className="input" type="number" placeholder="1200" value={price} onChange={e=>setPrice(e.target.value)}/></div>
+            <div className="field"><label>Billing period</label>
+              <select className="input" value={period} onChange={e=>setPeriod(e.target.value)}>
+                <option value="month">month</option>
+                <option value="3 months">3 months</option>
+                <option value="6 months">6 months</option>
+                <option value="year">year</option>
+              </select>
+            </div>
+          </div>
+          <button className="btn btn-primary btn-block btn-lg" disabled={!name.trim()||!price}
+            onClick={()=>{
+              dispatch({type:"ADD_PLAN", gymId:gym.id, plan:{name:name.trim(), price, period}});
+              setName(""); setPrice(""); setPeriod("month");
+              setShowAdd(false);
+            }}>Add plan</button>
+        </Modal>
+      )}
+    </div>
+  );
+}
+
+function OwnerClasses({gym}){
+  const {dispatch} = useApp();
+  const [showAdd, setShowAdd] = useState(false);
+  const [view, setView] = useState("list"); // list | calendar
+  const [title,setTitle]=useState("");
+  const [day,setDay]=useState("");
+  const [time,setTime]=useState("");
+  const [instructor,setInstructor]=useState("");
+  const [capacity,setCapacity]=useState("15");
+  const [price,setPrice]=useState("100");
+
+  return (
+    <div className="page">
+      <div className="row between" style={{marginBottom:18}}>
+        <h2 style={{fontSize:21,fontWeight:900,margin:0}}>Classes</h2>
+        <div className="row gap8">
+          <button className={"icon-btn "+(view==="list"?"on":"")} title="List view" onClick={()=>setView("list")}><Icon name="ticket" size={16}/></button>
+          <button className={"icon-btn "+(view==="calendar"?"on":"")} title="Calendar view" onClick={()=>setView("calendar")}><Icon name="calendar" size={16}/></button>
+          <button className="icon-btn on" onClick={()=>setShowAdd(true)}><Icon name="plus" size={18}/></button>
+        </div>
+      </div>
+
+      {gym.classes.length===0 ? <EmptyState icon="calendar" title="No classes yet" sub="Add a class to let members book a spot." action={<button className="btn btn-primary" onClick={()=>setShowAdd(true)}>Add a class</button>}/> :
+        view==="calendar" ? (
+          <WeeklyCalendar entries={gym.classes.map(c=>({cls:c, gym}))}/>
+        ) :
+        gym.classes.map(c=>(
+          <div key={c.id} className="card" style={{marginBottom:12}}>
+            <div className="row between" style={{marginBottom:10}}>
+              <div className="bold" style={{fontSize:15}}>{c.title}</div>
+              <button className="icon-btn" style={{width:34,height:34,minWidth:34}} onClick={()=>dispatch({type:"REMOVE_CLASS", gymId:gym.id, classId:c.id})}><Icon name="trash" size={14}/></button>
+            </div>
+            <div className="row gap16 tiny muted" style={{marginBottom:10}}>
+              <span className="row gap8"><Icon name="calendar" size={13}/>{c.day}</span>
+              <span className="row gap8"><Icon name="clock" size={13}/>{c.time}</span>
+            </div>
+            <div className="row between small">
+              <span className="muted">{c.instructor} · {c.price} ETB</span>
+              <span className="badge badge-purple">{c.attendees.length}/{c.capacity} booked</span>
+            </div>
+          </div>
+        ))
+      }
+
+      {showAdd && (
+        <Modal onClose={()=>setShowAdd(false)}>
+          <ModalHeader title="Add a class" onClose={()=>setShowAdd(false)}/>
+          <div className="field"><label>Class name</label><input className="input" placeholder="e.g. HIIT Blast" value={title} onChange={e=>setTitle(e.target.value)}/></div>
+          <div className="field"><label>Days</label><input className="input" placeholder="e.g. Mon / Wed / Fri" value={day} onChange={e=>setDay(e.target.value)}/></div>
+          <div className="input-row">
+            <div className="field"><label>Time</label><input className="input" placeholder="6:30 AM" value={time} onChange={e=>setTime(e.target.value)}/></div>
+            <div className="field"><label>Instructor</label><input className="input" placeholder="Name" value={instructor} onChange={e=>setInstructor(e.target.value)}/></div>
+          </div>
+          <div className="input-row">
+            <div className="field"><label>Capacity</label><input className="input" type="number" value={capacity} onChange={e=>setCapacity(e.target.value)}/></div>
+            <div className="field"><label>Drop-in price (ETB)</label><input className="input" type="number" value={price} onChange={e=>setPrice(e.target.value)}/></div>
+          </div>
+          <button className="btn btn-primary btn-block btn-lg" disabled={!title.trim()||!day.trim()||!time.trim()}
+            onClick={()=>{
+              dispatch({type:"ADD_CLASS", gymId:gym.id, cls:{title:title.trim(), day:day.trim(), time:time.trim(), instructor:instructor.trim()||"TBA", capacity, price}});
+              setTitle("");setDay("");setTime("");setInstructor("");setCapacity("15");setPrice("100");
+              setShowAdd(false);
+            }}>Add class</button>
+        </Modal>
+      )}
+    </div>
+  );
+}
+
+function OwnerPosts({gym}){
+  const {dispatch} = useApp();
+  const [caption, setCaption] = useState("");
+  const [pendingImage, setPendingImage] = useState(null);
+  const posts = gym.posts || [];
+
+  const submit = ()=>{
+    if(!pendingImage) return;
+    dispatch({type:"ADD_POST", gymId: gym.id, image: pendingImage, caption: caption.trim()});
+    setCaption("");
+    setPendingImage(null);
+    dispatch({type:"SET_TOAST", msg:"Post shared with members"});
+    setTimeout(()=>dispatch({type:"CLEAR_TOAST"}),2200);
+  };
+
+  return (
+    <div>
+      <p className="small muted" style={{marginBottom:16}}>Share photos of your gym, classes, and community — visible to anyone browsing your gym page.</p>
+
+      <div className="card" style={{marginBottom:24}}>
+        {pendingImage ? (
+          <div style={{position:"relative", marginBottom:14}}>
+            <img src={pendingImage} style={{width:"100%",height:160,objectFit:"cover",borderRadius:14}}/>
+            <button className="icon-btn" style={{position:"absolute", top:10, right:10, width:34, height:34, minWidth:34}} onClick={()=>setPendingImage(null)}><Icon name="close" size={15}/></button>
+          </div>
+        ) : (
+          <div className="center" style={{padding:"22px 0", marginBottom:14, border:"1.5px dashed var(--border)", borderRadius:14}}>
+            <PhotoUploadButton label="Choose a photo" onUploaded={setPendingImage} className="btn btn-primary btn-sm" icon="camera"/>
+          </div>
+        )}
+        <textarea className="input" placeholder="Write a caption..." value={caption} onChange={e=>setCaption(e.target.value)} style={{marginBottom:12}}/>
+        <button className="btn btn-primary btn-block" disabled={!pendingImage} onClick={submit}><Icon name="image" size={16}/> Share post</button>
+      </div>
+
+      {posts.length===0 ? <EmptyState icon="image" title="No posts yet" sub="Share your first gym photo to bring your page to life."/> : (
+        <div className="grid-2">
+          {posts.map(p=>(
+            <div key={p.id} className="card" style={{padding:0, overflow:"hidden"}}>
+              <div style={{position:"relative"}}>
+                <img src={p.image} style={{width:"100%",height:140,objectFit:"cover"}}/>
+                <button className="icon-btn" style={{position:"absolute", top:8, right:8, width:32, height:32, minWidth:32}}
+                  onClick={()=>dispatch({type:"REMOVE_POST", gymId:gym.id, postId:p.id})}>
+                  <Icon name="trash" size={14}/>
+                </button>
+              </div>
+              <div style={{padding:12}}>
+                {p.caption && <div className="tiny" style={{marginBottom:4}}>{p.caption}</div>}
+                <div className="tiny muted">{p.date}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function OwnerMembers({gym}){
+  const {state, dispatch} = useApp();
+  const [sub, setSub] = useState("checkin"); // checkin | payments | history
+  const [payFilter, setPayFilter] = useState("all"); // all | paid | overdue
+  const [code, setCode] = useState("");
+  const [result, setResult] = useState(null);
+  const demoMembers = gym.members.slice(0,3);
+  const norm = (s)=> (s||"").toLowerCase().replace(/[\s-]/g,"");
+
+  const verify = (val)=>{
+    if(!val.trim()) return;
+    const q = norm(val);
+    const memberMatch = gym.members.find(m => norm(m.name).includes(q) || (m.phone && norm(m.phone).includes(q)));
+    const passMatch = !memberMatch && gym.dayPasses.find(p => norm(p.name).includes(q) || (p.phone && norm(p.phone).includes(q)));
+    const matched = memberMatch || passMatch;
+    const frozen = memberMatch && memberMatch.status==="frozen";
+    setResult({
+      name: matched ? matched.name : "Guest",
+      plan: memberMatch ? memberMatch.plan : (passMatch ? "Day Pass" : "Unverified — no match found"),
+      isMatch: !!matched && !frozen,
+      frozen,
+      time:"Just now",
+    });
+    if(matched && !frozen){
+      dispatch({type:"LOG_CHECKIN", userId: matched.userId, name: matched.name, gymId: gym.id, gymName: gym.name, time:"Just now"});
+    }
+    dispatch({type:"SET_TOAST", msg: frozen ? "Membership is frozen" : matched ? "Entry verified ✓" : "No matching member found"});
+    setTimeout(()=>dispatch({type:"CLEAR_TOAST"}),2000);
+  };
+
+  const recentCheckins = state.checkins.filter(c => c.gymId===gym.id && daysBetween(c.date, TODAY) <= 30);
+  const paymentHistory = state.payments.filter(p => p.gymId===gym.id && daysBetween(p.date, TODAY) <= 365);
+
+  const membersWithStatus = gym.members.map(m=>{
+    const due = new Date(m.dueDate);
+    const d = isNaN(due) ? null : daysBetween(TODAY, due);
+    const overdue = d!==null && d<0;
+    const frozen = m.status==="frozen";
+    const displayStatus = frozen ? "frozen" : overdue ? "overdue" : (m.paymentStatus==="paid" && d>7) ? "paid" : "duesoon";
+    return {...m, _overdue:overdue, _frozen:frozen, _dueDays:d, _status:displayStatus};
+  });
+  const filteredMembers = payFilter==="all" ? membersWithStatus :
+    payFilter==="paid" ? membersWithStatus.filter(m=>m._status==="paid") :
+    membersWithStatus.filter(m=>m._status==="overdue");
+
+  return (
+    <div className="page">
+      <h2 style={{fontSize:21,fontWeight:900,margin:"4px 0 16px"}}>Members</h2>
+      <div className="tabs" style={{marginBottom:20}}>
+        <button className={"tab-chip "+(sub==="checkin"?"active":"")} onClick={()=>setSub("checkin")}>Check-in</button>
+        <button className={"tab-chip "+(sub==="payments"?"active":"")} onClick={()=>setSub("payments")}>Payments</button>
+        <button className={"tab-chip "+(sub==="history"?"active":"")} onClick={()=>setSub("history")}>History</button>
+      </div>
+
+      {sub==="checkin" && (
+        <div>
+          <p className="small muted" style={{marginBottom:20}}>Scan a member's GymBuddy QR code, or verify them by name or phone number.</p>
+
+          <div className="card center" style={{marginBottom:20, padding:32}}>
+            <div style={{width:64,height:64,borderRadius:16,background:"var(--purple-light)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 14px"}}>
+              <Icon name="scan" size={28} color="var(--purple)"/>
+            </div>
+            <div className="bold small" style={{marginBottom:4}}>Point camera at member's ID</div>
+            <div className="tiny muted">Camera scanning is simulated in this demo — use the field below instead.</div>
+          </div>
+
+          <div className="field" style={{marginBottom:14}}>
+            <label>Name, phone number, or Gym ID code</label>
+            <div className="row gap10">
+              <input className="input" placeholder="e.g. Nahom Girma or 0911 22 33 44" value={code} onChange={e=>setCode(e.target.value)}/>
+              <button className="btn btn-primary" style={{flexShrink:0, height:52}} onClick={()=>verify(code)}><Icon name="phone" size={17}/></button>
+            </div>
+          </div>
+
+          {demoMembers.length>0 && (
+            <div className="section">
+              <div className="tiny muted bold" style={{marginBottom:10, textTransform:"uppercase", letterSpacing:.4}}>Quick test</div>
+              <div className="row gap10" style={{flexWrap:"wrap"}}>
+                {demoMembers.map((m,i)=>(
+                  <button key={i} className="tab-chip" onClick={()=>{setCode(m.phone||m.name); verify(m.phone||m.name);}}>{m.name} · {m.phone||"no phone"}</button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {result && (
+            <div className="card" style={{background: result.isMatch ? "var(--success-light)" : "var(--danger-light)", border:"none", marginTop:8}}>
+              <div className="row gap12">
+                <div style={{width:44,height:44,borderRadius:12,background:"var(--card)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                  <Icon name={result.frozen ? "lock" : result.isMatch ? "checkCircle" : "close"} size={22} color={result.isMatch ? "var(--success)" : "var(--danger)"}/>
+                </div>
+                <div>
+                  <div className="bold small" style={{color: result.isMatch ? "var(--success)" : "var(--danger)"}}>{result.frozen ? "Membership frozen" : result.isMatch ? "Access granted" : "No match found"}</div>
+                  <div className="tiny muted">{result.name} · {result.plan} · {result.time}</div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {sub==="payments" && (
+        <div>
+          <div className="tabs" style={{marginBottom:16}}>
+            <button className={"tab-chip "+(payFilter==="all"?"active":"")} onClick={()=>setPayFilter("all")}>All</button>
+            <button className={"tab-chip "+(payFilter==="paid"?"active":"")} onClick={()=>setPayFilter("paid")}>Paid</button>
+            <button className={"tab-chip "+(payFilter==="overdue"?"active":"")} onClick={()=>setPayFilter("overdue")}>Overdue</button>
+          </div>
+
+          {gym.members.length===0 ? <EmptyState icon="dollar" title="No members yet" sub="Payment tracking will show up here once members join."/> :
+          filteredMembers.length===0 ? <EmptyState icon="dollar" title={"No "+(payFilter==="all"?"members":payFilter)+" to show"} sub="Try a different filter."/> :
+          filteredMembers.map((m,i)=>(
+            <div key={i} className="card" style={{marginBottom:12}}>
+              <div className="row between" style={{marginBottom:10}}>
+                <div className="row gap12">
+                  <div className="avatar" style={{width:38,height:38,fontSize:13}}>{m.name.split(" ").map(x=>x[0]).slice(0,2).join("")}</div>
+                  <div>
+                    <div className="small bold">{m.name}</div>
+                    <div className="tiny muted">{m.plan} · {m.phone||"no phone"}</div>
+                  </div>
+                </div>
+                {m._frozen ? <span className="badge badge-muted">Frozen</span> :
+                  m._overdue ? <span className="badge badge-danger">Overdue</span> :
+                  m._status==="paid" ? <span className="badge badge-success">Paid</span> :
+                  <span className="badge badge-warn">Due soon</span>}
+              </div>
+              <div className="row between small" style={{marginBottom:12}}>
+                <span className="muted">Due date</span>
+                <span className="bold">{m.dueDate || "—"}</span>
+              </div>
+              <div className="row gap10">
+                <button className="btn btn-secondary btn-sm" style={{flex:1}} disabled={m._frozen} onClick={()=>{
+                  dispatch({type:"MARK_PAYMENT_PAID", gymId:gym.id, userId:m.userId});
+                  dispatch({type:"SET_TOAST", msg:"Payment collection approved"});
+                  setTimeout(()=>dispatch({type:"CLEAR_TOAST"}),2000);
+                }}><Icon name="checkCircle" size={14}/> Mark paid</button>
+                <button className="btn btn-sm" style={{flex:1, background: m._frozen?"var(--success-light)":"var(--danger-light)", color: m._frozen?"var(--success)":"var(--danger)"}} onClick={()=>dispatch({type:"TOGGLE_FREEZE", gymId:gym.id, userId:m.userId})}>
+                  <Icon name={m._frozen?"unlock":"lock"} size={14}/> {m._frozen ? "Unfreeze" : "Freeze"}
+                </button>
+              </div>
+            </div>
+          ))}
+
+          <div className="section-head" style={{marginTop:26}}><h3>Payment history</h3></div>
+          <p className="tiny muted" style={{marginTop:-8, marginBottom:14}}>Collected payments from the last 12 months.</p>
+          {paymentHistory.length===0 ? <EmptyState icon="dollar" title="No payment history yet" sub="Approved payments will be logged here for a year."/> :
+            paymentHistory.map(p=>(
+              <div key={p.id} className="list-item">
+                <div style={{width:36,height:36,borderRadius:11,background:"var(--success-light)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                  <Icon name="dollar" size={16} color="var(--success)"/>
+                </div>
+                <div style={{flex:1}}>
+                  <div className="small bold">{p.name}</div>
+                  <div className="tiny muted">{p.plan} · {fmtDate(p.date)}</div>
+                </div>
+                <span className="bold small">{p.amount.toLocaleString()} ETB</span>
+              </div>
+            ))
+          }
+        </div>
+      )}
+
+      {sub==="history" && (
+        <div>
+          <p className="tiny muted" style={{marginBottom:16}}>Showing check-ins from the last 30 days. Older visits are cleared from this view automatically.</p>
+          {recentCheckins.length===0 ? <EmptyState icon="clock" title="No recent check-ins" sub="Verified entries from the last 30 days will appear here."/> :
+            recentCheckins.map(c=>(
+              <div key={c.id} className="list-item">
+                <div className="avatar" style={{width:36,height:36,fontSize:12}}>{c.name.split(" ").map(x=>x[0]).slice(0,2).join("")}</div>
+                <div style={{flex:1}}>
+                  <div className="small bold">{c.name}</div>
+                  <div className="tiny muted">{fmtDate(c.date)} · {c.time}</div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ======================= ROOT ======================= */
+function App(){
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(()=>{
+    document.documentElement.setAttribute("data-theme", state.theme);
+  }, [state.theme]);
+
+  if(state.screen==="marketing"){
+    return (
+      <Ctx.Provider value={{state, dispatch}}>
+        <Toast/>
+        <MarketingPage/>
+      </Ctx.Provider>
+    );
+  }
+
+  return (
+    <Ctx.Provider value={{state, dispatch}}>
+      <div className="app-shell">
+        <Toast/>
+        {state.screen==="onboardCustomer" && <OnboardCustomer/>}
+        {state.screen==="onboardOwner" && <OnboardOwner/>}
+        {state.screen==="app" && state.role==="customer" && <CustomerApp/>}
+        {state.screen==="app" && state.role==="owner" && <OwnerApp/>}
+      </div>
+    </Ctx.Provider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
